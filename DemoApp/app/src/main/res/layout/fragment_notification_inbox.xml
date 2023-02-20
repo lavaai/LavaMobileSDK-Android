@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/signinTextBackground"
+        android:minHeight="?attr/actionBarSize"
+        android:paddingStart="5dp"
+        android:paddingEnd="5dp"
+        android:visibility="gone"
+        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+        <TextView
+            android:id="@+id/toolbar_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/inbox_messages"
+            android:textAllCaps="true"
+            android:textColor="@color/white"
+            android:textSize="@dimen/toolbar_title_text_size" />
+
+    </androidx.appcompat.widget.Toolbar>
+
+    <Button
+        android:id="@+id/btGetUnreadCount"
+        android:layout_below="@id/toolbar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/unread_count" />
+
+    <Button
+        android:id="@+id/btNumberOfMessages"
+        android:layout_below="@id/toolbar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/btGetUnreadCount"
+        android:text="@string/total_count" />
+
+    <Button
+        android:id="@+id/btEdit"
+        android:layout_below="@id/toolbar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/btNumberOfMessages"
+        android:text="@string/edit" />
+
+    <RelativeLayout
+        android:id="@+id/rlUnreadCountContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/btGetUnreadCount"
+        android:background="@color/white_bg"
+        android:padding="10dp">
+
+
+        <TextView
+            android:id="@+id/tvCountName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:text="Unread count : "
+            android:textColor="@color/black" />
+
+        <TextView
+            android:id="@+id/tvUnreadCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toEndOf="@id/tvCountName"
+            android:text="--"
+            android:textColor="@color/black" />
+
+
+
+    </RelativeLayout>
+
+
+
+    <TextView
+        android:id="@+id/tvNoMessage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="No message to display"
+        android:visibility="gone" />
+
+
+    <RelativeLayout
+        android:id="@+id/constraintLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/btEdit"
+        android:background="@color/signinTextBackground">
+
+        <TextView
+            android:id="@+id/tvState"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="16dp"
+            android:text="@string/state" />
+
+        <Spinner
+            android:id="@+id/spState"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="8dp"
+            android:layout_toEndOf="@+id/tvState"
+            tools:style="@style/mySpinnerItemStyle" />
+
+        <Button
+            android:id="@+id/btRefresh"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="16dp"
+            android:text="@string/refresh"
+            android:textAllCaps="false"
+            android:visibility="visible" />
+
+
+    </RelativeLayout>
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvNotificationInbox"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/constraintLayout" />
+
+</RelativeLayout>

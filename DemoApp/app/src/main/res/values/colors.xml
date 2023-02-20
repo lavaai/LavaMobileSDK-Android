@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="black">#000000</color>
+    <color name="white">#FFFFFF</color>
+
+    // Login Screen UI
+    <color name="signinTextBackground">#579AF4</color>
+    <color name="inboxMessages">#2c428B</color>
+    <color name="emailText">#D3D3D7</color>
+    <color name="loginButton">#EC0086</color>
+    <color name="background_dark_white">#EFEFF4</color>
+
+    //User Home
+    <color name="profileBackground">#67A8F6</color>
+    <color name="profileBorder">#AAAAAA</color>
+    <color name="drawer">#93C0FC</color>
+
+    <color name="transparent">#55000000</color>
+    <color name="fully_transparent">#00000000</color>
+
+    <color name="light_grey">#bcbcbc</color>
+    <color name="dark_grey">#4C4C4C</color>
+    <color name="pink">#fc4cbf</color>
+    <color name="red">#dd2222</color>
+    <color name="white_bg">#FBFBFB</color>
+    <color name="indicator_blue">#08D1F4</color>
+
+    <color name="analytics_red">#dd2222</color>
+    <color name="analytics_green">#4db31e</color>
+    <color name="analytics_blue">#223bdd</color>
+    <color name="analytics_yellow">#ddc122</color>
+</resources>

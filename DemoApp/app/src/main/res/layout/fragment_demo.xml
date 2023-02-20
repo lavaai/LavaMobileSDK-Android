@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:weightSum="6"
+    android:background="@color/background_dark_white">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_weight="1"
+        android:weightSum="5">
+
+
+
+        <Button
+            android:id="@+id/bt_video_1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Video1"
+            android:tag="Video1"
+            android:textColor="@color/white"
+            android:textAllCaps="false"
+            android:background="@drawable/analytics_button_shape"/>
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"/>
+
+        <Button
+            android:id="@+id/bt_video_2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Video2"
+            android:tag="Video2"
+            android:textColor="@color/white"
+            android:textAllCaps="false"
+            android:background="@drawable/analytics_button_shape"/>
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_weight="1"
+        android:weightSum="5">
+
+        <Button
+            android:id="@+id/bt_image_1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Image1"
+            android:tag="Image1"
+            android:textColor="@color/white"
+            android:textAllCaps="false"
+            android:background="@drawable/analytics_button_shape"/>
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+           />
+
+        <Button
+            android:id="@+id/bt_image_2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Image2"
+            android:tag="Image2"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:background="@drawable/analytics_button_shape"/>
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_weight="1"
+        android:weightSum="5">
+
+        <Button
+            android:id="@+id/bt_article_1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Article1"
+            android:tag="Article1"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:background="@drawable/analytics_button_shape"/>
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"/>
+
+        <Button
+            android:id="@+id/bt_article_2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Article2"
+            android:tag="Article2"
+            android:textAllCaps="false"
+            android:background="@drawable/analytics_button_shape"
+            android:textColor="@color/white"/>
+
+
+    </LinearLayout>
+
+
+</LinearLayout>

@@ -1,0 +1,6 @@
+include ':app'
+
+if (debugLavaSdkBuild.toBoolean()) {
+    include ':lavasdk'
+    project(':lavasdk').projectDir = new File(settingsDir, '../SDK-Android/lavasdk')
+}

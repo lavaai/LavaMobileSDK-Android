@@ -1,0 +1,150 @@
+buildscript {
+    repositories {
+        maven { url "https://maven.google.com" }
+        google()
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.google.gms:google-services:4.3.10'
+        classpath 'com.google.firebase:firebase-crashlytics-gradle:2.8.0'
+    }
+}
+
+ext.getGprUser = {
+    if (project.hasProperty("LAVA_GITHUB_PACKAGE_PUBLISH_USERNAME")) {
+        return project.properties["LAVA_GITHUB_PACKAGE_PUBLISH_USERNAME"]
+    } else {
+        return System.getenv("LAVA_GITHUB_PACKAGE_PUBLISH_USERNAME") ?: ""
+    }
+}
+
+ext.getGprKey = {
+    if (project.hasProperty("LAVA_GITHUB_PACKAGE_PUBLISH_KEY")) {
+        return project.properties["LAVA_GITHUB_PACKAGE_PUBLISH_KEY"]
+    } else {
+        return System.getenv("LAVA_GITHUB_PACKAGE_PUBLISH_KEY") ?: ""
+    }
+}
+
+repositories {
+    maven { url 'https://maven.fabric.io/public' }
+
+    maven {
+        name = "GitHubPackages"
+        url = uri("https://maven.pkg.github.com/lavaai/SDK-Android")
+        credentials {
+            username = getGprUser()
+            password = getGprKey()
+        }
+    }
+    google()
+    mavenCentral()
+    mavenLocal()
+}
+
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlinx-serialization'
+
+android {
+    compileSdkVersion 31
+
+    defaultConfig {
+        applicationId "ai.lava.demoapp.android"
+        minSdk 31
+        targetSdkVersion 31
+        versionCode 1
+        versionName "0.9.0"
+        multiDexEnabled true
+
+        task applyLavaServicesBuildConfig {
+            def lavaServicesFile = file('lava-services.json')
+            def lavaServicesJson = new groovy.json.JsonSlurper().parseText(lavaServicesFile.text)
+
+            buildConfigField("String", "clientId", "\"${lavaServicesJson.clientId}\"")
+            buildConfigField("String", "appKey", "\"${lavaServicesJson.appKey}\"")
+            buildConfigField("String", "enableSecureMemberToken", "\"${lavaServicesJson.enableSecureMemberToken}\"")
+        }
+    }
+
+    buildTypes {
+        debug {
+        }
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    productFlavors {
+        demo {
+            applicationId "ai.lava.demoapp.android"
+            versionName "0.9.0"
+            minSdkVersion 31
+            targetSdkVersion 31
+        }
+    }
+
+    lintOptions {
+        abortOnError false
+    }
+
+    flavorDimensions "default"
+
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/NOTICE.txt'
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.2'
+
+    implementation 'com.google.code.gson:gson:2.8.9'
+    implementation 'androidx.appcompat:appcompat:1.4.0'
+    implementation 'com.google.android.material:material:1.4.0'
+    implementation 'androidx.multidex:multidex:2.0.1'
+
+    implementation 'com.google.firebase:firebase-messaging:23.0.0'
+    implementation platform('com.google.firebase:firebase-bom:29.0.0')
+    implementation 'com.google.firebase:firebase-crashlytics'
+    implementation 'com.google.firebase:firebase-analytics'
+
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.4.0'
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
+    implementation "androidx.core:core-ktx:1.7.0"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.0"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+
+    if (debugLavaSdkBuild.toBoolean()) {
+        implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+        implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+        implementation 'com.squareup.retrofit2:converter-scalars:2.9.0'
+        implementation 'com.squareup.okhttp3:okhttp:4.9.0'
+        implementation 'com.squareup.okhttp3:logging-interceptor:4.9.0'
+        implementation 'com.squareup.okio:okio:2.8.0'
+
+        implementation 'com.auth0.android:jwtdecode:2.0.1'
+
+        implementation project(':lavasdk')
+    }
+    else
+    {
+        implementation useLavaSdkMavenPackageVersion
+    }
+}
+
+apply plugin: 'com.google.gms.google-services'
+apply plugin: 'com.google.firebase.crashlytics'
