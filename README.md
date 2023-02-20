@@ -1,11 +1,8 @@
 ## Android LavaSDK
---
 
 Welcome to Android LavaSDK. This library will help your app integrate with LAVA service.
 
 ### Installation
---
-
 This library is hosted on GitHub Packages, in order to install it, you must ask LAVA for granting you the access. After that, please follow the steps below:
 1. Generate Personal Access Token.
 2. Set up Android project.
@@ -68,7 +65,6 @@ implementation 'ai.lava.mobile-sdk:lavasdk-debug.pkg:2.0.13'
 
 
 ### Help
---
 Please contact LAVA Support in case you need help.
 
 
