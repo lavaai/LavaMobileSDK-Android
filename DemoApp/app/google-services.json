@@ -1,1 +1,54 @@
-// Replace with your configuration
+{
+  "project_info": {
+    "project_number": "547375242027",
+    "project_id": "lava-demo-104d6",
+    "storage_bucket": "lava-demo-104d6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:547375242027:android:4cd2be1aedb816e873036e",
+        "android_client_info": {
+          "package_name": "ai.lava.demoapp.android"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "547375242027-4mjl88j84fm8qde405hni0r83eep6qnr.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ai.lava.demoapp.android",
+            "certificate_hash": "fab0d866841799e1cabb20c130f317ec19f6c084"
+          }
+        },
+        {
+          "client_id": "547375242027-1c9dm4ubjelbjtv5cd8btqr9t2mneasi.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBMtBojP50hb3Qrq8SOJo8LKeg32cFwHCA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "547375242027-1c9dm4ubjelbjtv5cd8btqr9t2mneasi.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "547375242027-8a2bj2rrb1pkqe1ehqaeaq1p5cebjpio.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "ai.lava.demoapp.ios"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

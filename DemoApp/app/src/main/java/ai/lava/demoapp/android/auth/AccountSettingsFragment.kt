@@ -17,7 +17,7 @@ class AccountSettingsFragment : Fragment(), View.OnClickListener {
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    Lava.instance.track(Track(Track.ACTION_VIEW_SCREEN, "AccountSettingsScreen", null, null, null, null, null))
+    Lava.instance.track(Track(action = Track.ACTION_VIEW_SCREEN, category = "AccountSettingsScreen"))
   }
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {

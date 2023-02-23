@@ -13,16 +13,14 @@ import com.lava.lavasdk.*
 class ProfileFragment : Fragment(), View.OnClickListener {
   private var tvFirstName: TextView? = null
   private var tvLastName: TextView? = null
-  private var tvPhoneNumber: TextView? = null
   private var tvEmailId: TextView? = null
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     Lava.instance.track(
       Track(
-        Track.ACTION_VIEW_SCREEN,
-        "ProfileScreen",
-        null, null, null, null, null
+        action = Track.ACTION_VIEW_SCREEN,
+        category = "ProfileScreen"
       )
     )
   }
@@ -36,7 +34,6 @@ class ProfileFragment : Fragment(), View.OnClickListener {
   private fun initUI(view: View) {
     tvFirstName = view.findViewById(R.id.tv_first_name)
     tvLastName = view.findViewById(R.id.tv_last_name)
-    tvPhoneNumber = view.findViewById(R.id.tv_phone_number)
     tvEmailId = view.findViewById(R.id.tv_email_id)
     view.findViewById<View>(R.id.tvInAppPass).setOnClickListener(this)
   }
@@ -62,21 +59,16 @@ class ProfileFragment : Fragment(), View.OnClickListener {
       CLog.e("Profile is null")
       return
     }
-
-    profile.firstName?.let {
-      tvFirstName?.text = it
+    if (profile.firstName != null) {
+      tvFirstName?.text = profile.firstName
+    }
+    if (profile.lastName != null) {
+      tvLastName?.text = profile.lastName
     }
 
-    profile.lastName?.let {
-      tvLastName?.text = it
-    }
-
-    profile.phoneNumber?.let {
-      tvPhoneNumber?.text = it
-    }
-
-    Lava.instance.getUser()?.email?.let {
-      tvEmailId?.text = it
+    val email = Lava.instance.getUser()?.email
+    if (email != null) {
+      tvEmailId?.text = email
     }
   }
 

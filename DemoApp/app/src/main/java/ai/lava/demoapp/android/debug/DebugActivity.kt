@@ -3,22 +3,17 @@ package ai.lava.demoapp.android.debug
 import ai.lava.demoapp.android.R
 import ai.lava.demoapp.android.utils.CLog
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.content.pm.ActivityInfo
-import android.net.ConnectivityManager
 import android.net.wifi.WifiManager
 import android.os.Bundle
 import android.text.TextUtils
 import android.text.format.Formatter
 import android.view.View
 import android.widget.TextView
-import androidx.core.net.ConnectivityManagerCompat
 import com.lava.lavasdk.DebugData
 import com.lava.lavasdk.DebugDataListener
 import com.lava.lavasdk.Lava
-import java.net.Inet4Address
-import java.net.InetAddress
 
 class DebugActivity : Activity() {
   private var mTvDebugInfo: TextView? = null
@@ -127,11 +122,11 @@ class DebugActivity : Activity() {
   }
 
   private fun getIPAddress(): String? {
-    val cm = applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-
-    with(cm) {
-      return getLinkProperties(activeNetwork)?.linkAddresses?.get(1)?.address?.hostAddress
+    val wm = applicationContext.getSystemService(Activity.WIFI_SERVICE) as? WifiManager
+    if (wm != null) {
+      return Formatter.formatIpAddress(wm.connectionInfo.ipAddress)
     }
+    return null
   }
 
 }

@@ -1,10 +1,5 @@
 package ai.lava.demoapp.android
 
-import ai.lava.demoapp.android.api.ApiResultListener
-import ai.lava.demoapp.android.api.AuthResponse
-import ai.lava.demoapp.android.api.RefreshTokenRequest
-import ai.lava.demoapp.android.api.RestClient
-import ai.lava.demoapp.android.common.AppSession
 import ai.lava.demoapp.android.deepLink.DeepLinkReceiver
 import ai.lava.demoapp.android.utils.CLog
 import android.content.Context
@@ -15,19 +10,20 @@ import androidx.multidex.MultiDexApplication
 import com.google.firebase.messaging.FirebaseMessaging
 import com.lava.lavasdk.Lava
 import com.lava.lavasdk.LavaLogLevel
-import com.lava.lavasdk.SecureMemberTokenExpiryListener
 import com.lava.lavasdk.internal.Style
 
-class LavaApplication : MultiDexApplication(), SecureMemberTokenExpiryListener {
+class LavaApplication : MultiDexApplication() {
+    override fun onCreate() {
+        super.onCreate()
 
-    fun initLavaSdk(enableSecureMemberToken: Boolean) {
+        CLog.logLevel = CLog.LogLevel.VERBOSE
+
         Lava.init(
-            this,
-            BuildConfig.appKey,
-            BuildConfig.clientId,
-            R.drawable.app_icon_shil.toString(),
-            LavaLogLevel.VERBOSE,
-            LavaLogLevel.VERBOSE
+            application = this,
+            appKey = BuildConfig.appKey,
+            clientId = BuildConfig.clientId,
+            smallIcon = R.drawable.app_icon_shil.toString(),
+            logLevel = LavaLogLevel.VERBOSE
         )
 
         val customStyle = Style()
@@ -40,26 +36,8 @@ class LavaApplication : MultiDexApplication(), SecureMemberTokenExpiryListener {
 
         Lava.instance.setCustomStyle(customStyle)
 
-        Lava.instance.registerDeepLinkReceiver(DeepLinkReceiver::class.java)
-
-        if (enableSecureMemberToken) {
-            Lava.instance.subscribeSecureMemberTokenExpiry(this)
-        } else {
-            Lava.instance.setSecureMemberToken(null)
-            Lava.instance.unsubscribeSecureMemberTokenExpiry(this)
-        }
-    }
-
-    override fun onCreate() {
-        super.onCreate()
-
-        instance = this
-
-        CLog.logLevel = CLog.LogLevel.VERBOSE
-
-        AppSession.init(this)
-        initLavaSdk(BuildConfig.enableSecureMemberToken.toBoolean())
         registerForNotification()
+        Lava.instance.registerDeepLinkReceiver(DeepLinkReceiver::class.java)
     }
 
     private fun registerForNotification() {        //FCM
@@ -72,39 +50,5 @@ class LavaApplication : MultiDexApplication(), SecureMemberTokenExpiryListener {
     override fun attachBaseContext(base: Context) {
         super.attachBaseContext(base)
         MultiDex.install(this)
-    }
-
-    override fun onExpire(onSuccess: () -> Unit, onError: (Throwable) -> Unit) {
-        val email = AppSession.instance.getEmail()
-        email?.let {
-            val body = RefreshTokenRequest(it)
-            RestClient.refreshToken(body, object: ApiResultListener {
-                override fun onResult(
-                    success: Boolean,
-                    authResponse: AuthResponse?,
-                    errorMessage: String?
-                ) {
-                    if (!success) {
-                        onError(Error("Not successful"))
-                        return
-                    }
-
-                    authResponse?.memberToken?.let { token ->
-                        Lava.instance.setSecureMemberToken(token)
-                    }
-
-                    onSuccess()
-                }
-            })
-        }
-    }
-
-    override fun onTerminate() {
-        super.onTerminate()
-        Lava.instance.unsubscribeSecureMemberTokenExpiry(this)
-    }
-
-    companion object {
-        lateinit var instance: LavaApplication
     }
 }

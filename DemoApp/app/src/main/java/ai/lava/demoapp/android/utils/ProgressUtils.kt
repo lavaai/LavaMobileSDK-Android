@@ -1,11 +1,10 @@
 package ai.lava.demoapp.android.utils
 
-import ai.lava.demoapp.android.R
 import android.app.Activity
-import android.app.AlertDialog
+import android.app.ProgressDialog
 
 object ProgressUtils {
-  private var pd: AlertDialog? = null
+  private var pd: ProgressDialog? = null
 
   /**
    * Show progress dialog
@@ -52,11 +51,9 @@ object ProgressUtils {
       a?.runOnUiThread {
         try {
           cancel()
-          val builder = AlertDialog.Builder(a)
-          builder.setMessage(loading)
-          builder.setCancelable(isCancellable)
-          builder.setView(R.layout.layout_loading_dialog)
-          pd = builder.create()
+          pd = ProgressDialog(a)
+          pd!!.setMessage(loading)
+          pd!!.setCancelable(isCancellable)
           pd!!.show()
         } catch (e: Throwable) {
           e.printStackTrace()

@@ -16,7 +16,7 @@ class DebugFragment : Fragment() {
   private var mLlRootContainer: LinearLayout? = null
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    Lava.instance.track(Track(Track.ACTION_VIEW_SCREEN, "DebugScreen", null, null, null, null, null))
+    Lava.instance.track(Track(action = Track.ACTION_VIEW_SCREEN, category = "DebugScreen"))
   }
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {

@@ -72,7 +72,7 @@ class AnalyticsDemoFragment : Fragment(), View.OnClickListener {
       tags.add("tag2")
       tags.add("tag3")
       tags.add("tag4")
-      Lava.instance.track(Track("Interact", category, null, null, null, null, null))
+      Lava.instance.track(Track(action = "Interact", category = category))
     } catch (e: Throwable) {
       e.printStackTrace()
     }
