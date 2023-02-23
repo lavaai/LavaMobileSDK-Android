@@ -16,7 +16,6 @@ import java.util.concurrent.atomic.AtomicInteger
 class EditProfileFragment : Fragment(), View.OnClickListener {
   private var etFirstName: EditText? = null
   private var etLastName: EditText? = null
-  private var etPhoneNumber: EditText? = null
   private var uploadApiCallCount = AtomicInteger(0)
 
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,7 +33,6 @@ class EditProfileFragment : Fragment(), View.OnClickListener {
   private fun initUI(view: View) {
     etFirstName = view.findViewById(R.id.et_first_name)
     etLastName = view.findViewById(R.id.et_last_name)
-    etPhoneNumber = view.findViewById(R.id.et_phone_number)
   }
 
   private fun setUpUI() {
@@ -49,9 +47,8 @@ class EditProfileFragment : Fragment(), View.OnClickListener {
     Lava.instance.getProfile(object : ProfileListener {
       override fun onProfile(success: Boolean, message: String, profile: UserProfile?) {
         if (success) {
-          profile?.firstName?.let{ etFirstName?.setText(it) }
-          profile?.lastName?.let{ etLastName?.setText(it) }
-          profile?.phoneNumber?.let { etPhoneNumber?.setText(it) }
+          profile?.firstName?.let{etFirstName?.setText(it)}
+          profile?.lastName?.let{etLastName?.setText(it)}
         }
       }
     })
@@ -61,7 +58,7 @@ class EditProfileFragment : Fragment(), View.OnClickListener {
     val profile = UserProfile(
       etFirstName?.text?.toString(),
       etLastName?.text?.toString(),
-      etPhoneNumber?.text.toString()
+      null
     )
 
     uploadApiCallCount.incrementAndGet()

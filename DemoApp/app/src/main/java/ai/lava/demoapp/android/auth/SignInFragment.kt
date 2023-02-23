@@ -1,22 +1,18 @@
 package ai.lava.demoapp.android.auth
 
-import ai.lava.demoapp.android.BuildConfig
-import ai.lava.demoapp.android.LavaApplication
 import ai.lava.demoapp.android.R
-import ai.lava.demoapp.android.api.ApiResultListener
-import ai.lava.demoapp.android.api.AuthResponse
-import ai.lava.demoapp.android.api.LoginRequest
-import ai.lava.demoapp.android.api.RestClient
-import ai.lava.demoapp.android.common.AppSession
 import ai.lava.demoapp.android.debug.DebugActivity
 import ai.lava.demoapp.android.utils.CLog
 import ai.lava.demoapp.android.utils.GenericUtils
 import ai.lava.demoapp.android.utils.ProgressUtils
 import android.os.Bundle
+import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.Button
+import android.widget.EditText
+import android.widget.RelativeLayout
 import androidx.fragment.app.Fragment
 import com.lava.lavasdk.Lava
 import com.lava.lavasdk.ResultListener
@@ -25,8 +21,8 @@ import com.lava.lavasdk.Track
 class SignInFragment : Fragment(), View.OnClickListener {
   private var btLogin: Button? = null
   private var etUserName: EditText? = null
-  private var etPassword: EditText? = null
   private var btShowDebugInfo: Button? = null
+  private var mUserName: String? = null
   private var rlViewContainer: RelativeLayout? = null
   private var remaining = 0
 
@@ -63,7 +59,6 @@ class SignInFragment : Fragment(), View.OnClickListener {
     btShowDebugInfo = view.findViewById(R.id.bt_show_debug)
     btInboxMessage = view.findViewById(R.id.bt_inbox_message)
     etUserName = view.findViewById(R.id.et_email)
-    etPassword = view.findViewById(R.id.et_password)
     rlViewContainer = view.findViewById(R.id.rl_login_container)
   }
 
@@ -96,56 +91,13 @@ class SignInFragment : Fragment(), View.OnClickListener {
   }
 
   private fun doLogin() {
-    if (BuildConfig.enableSecureMemberToken.toBoolean()) {
-      loginWithAppBackend()
-    } else {
-      loginWithLavaSdk()
-    }
-  }
-
-  fun loginWithAppBackend() {
-    val username = etUserName?.text?.toString()
-    if (!isValidEmail(username)) {
+    mUserName = etUserName?.text?.toString()
+    if (!isValidEmail(mUserName)) {
       etUserName!!.error = "Please enter valid email"
       return
     }
-
-    val password = etPassword?.text?.toString()
-    if (password.isNullOrBlank()) {
-      etPassword?.error = "Please enter valid password"
-      return
-    }
-
     ProgressUtils.showProgress(activity, false)
-
-    val body = LoginRequest(email = username!!, password = password)
-
-    RestClient.login(body, object: ApiResultListener {
-      override fun onResult(success: Boolean, authResponse: AuthResponse?, errorMessage: String?) {
-        ProgressUtils.cancel()
-
-        if (!success) {
-          // TODO: Report issue
-          CLog.d("Error login: ${errorMessage ?: ""}")
-          GenericUtils.displayToast(activity, "Error login: ${errorMessage ?: ""}")
-          return
-        }
-
-        AppSession.instance.setEmail(body.email)
-
-        Lava.instance.setEmail(username, commonLoginListener)
-
-        authResponse?.memberToken?.let {
-          Lava.instance.setSecureMemberToken(it)
-        }
-      }
-    })
-  }
-
-  fun loginWithLavaSdk() {
-    val username = etUserName?.text?.toString()
-    ProgressUtils.showProgress(activity, false)
-    Lava.instance.setEmail(username, commonLoginListener)
+    Lava.instance.setEmail(mUserName, commonLoginListener)
   }
 
   override fun onResume() {
@@ -155,7 +107,7 @@ class SignInFragment : Fragment(), View.OnClickListener {
 
   companion object {
     fun isValidEmail(target: String?): Boolean {
-      return target != null && target.isNotEmpty()
+      return target != null && target.isNotEmpty() && Patterns.EMAIL_ADDRESS.matcher(target).matches()
     }
   }
 }

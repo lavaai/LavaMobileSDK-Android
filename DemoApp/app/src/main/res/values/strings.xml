@@ -27,8 +27,5 @@
     <string name="state">State :</string>
     <string name="unread_count">U Count</string>
     <string name="total_count">T count</string>
-    <string name="password">Password</string>
-    <string name="enable_secure_member_token">Enable Secure Member Token</string>
-    <string name="please_wait">Please wait ...</string>
 
 </resources>

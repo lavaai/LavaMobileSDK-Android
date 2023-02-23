@@ -94,39 +94,18 @@
                     android:paddingStart="7dp"
                     android:paddingTop="7dp"
                     android:paddingEnd="7dp"
-                    android:paddingBottom="7dp"
-                    android:singleLine="true"
-                    android:textAppearance="?android:textAppearanceSmall"
-                    android:textColor="@color/black"
-                    android:textColorHint="#757575"
-                    android:text="app.001@lava.ai" />
-
-                <EditText
-                    android:id="@+id/et_password"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/et_email"
-                    android:layout_marginTop="15dp"
-                    android:background="@color/white"
-                    android:hint="@string/password"
-                    android:inputType="textPassword"
-                    android:minHeight="48dp"
-                    android:paddingStart="7dp"
-                    android:paddingTop="7dp"
-                    android:paddingEnd="7dp"
                     android:paddingBottom="10dp"
                     android:singleLine="true"
                     android:textAppearance="?android:textAppearanceSmall"
                     android:textColor="@color/black"
-                    android:textColorHint="#757575"
-                    android:text="123456" />
+                    android:textColorHint="#757575" />
 
                 <Button
                     android:id="@+id/bt_login"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/et_password"
-                    android:layout_marginTop="10dp"
+                    android:layout_below="@id/et_email"
+                    android:layout_marginTop="5dp"
                     android:background="@drawable/ripple_effect_with_pink_background"
                     android:text="@string/login"
                     android:textColor="@color/white"

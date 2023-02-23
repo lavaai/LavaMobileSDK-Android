@@ -2,7 +2,6 @@ package ai.lava.demoapp.android.inbox
 
 import ai.lava.demoapp.android.MainActivity
 import ai.lava.demoapp.android.utils.CLog
-import ai.lava.demoapp.android.utils.GenericUtils
 import ai.lava.demoapp.android.utils.ProgressUtils
 import android.app.Application
 import android.content.Context
@@ -10,7 +9,6 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import com.lava.lavasdk.*
 import java.util.*
-import java.time.Instant
 
 class InboxMessageViewModel(application: Application) : AndroidViewModel(application) {
   var inboxMessageList = MutableLiveData<ArrayList<InboxMessage>?>()
@@ -79,7 +77,8 @@ class InboxMessageViewModel(application: Application) : AndroidViewModel(applica
   fun displayMessage(ctx: Context, index: Int, message: InboxMessage) {
     displayInboxMessage(ctx, message)
     val messages = inboxMessageList.value
-    messages?.set(index, messages[index].copy("", "", Instant.now(), Instant.now(), true, ""))
+    val newMessage = message.copy(message.title, message.messageId, message.createdAt, message.expiresAt, true, message.payload)
+    messages?.set(index, newMessage)
     inboxMessageList.value = messages
   }
 
@@ -95,16 +94,7 @@ class InboxMessageViewModel(application: Application) : AndroidViewModel(applica
     }
 
     try {
-      Lava.instance.handleNotification(
-        ctx.applicationContext, MainActivity::class.java, message.toNotificationData(),
-        object: ResultListener {
-          override fun onResult(success: Boolean, message: String) {
-            if (!success) {
-              GenericUtils.displayToast(ctx, message)
-            }
-          }
-        }
-      )
+      Lava.instance.handleNotification(ctx.applicationContext, MainActivity::class.java, message.toNotificationData())
       if (message.read) {
         CLog.d("Update Inbox message state not triggered - Message is already read")
         return

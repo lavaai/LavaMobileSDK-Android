@@ -4,11 +4,8 @@ import ai.lava.demoapp.android.auth.LoginActivity
 import ai.lava.demoapp.android.utils.CLog
 import android.app.Activity
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.os.Handler
-import android.os.Looper
-import android.view.WindowInsets
 import android.view.WindowManager
 import com.lava.lavasdk.Lava
 
@@ -18,11 +15,8 @@ class SplashScreenActivity : Activity() {
     super.onCreate(savedInstanceState)
     //Fabric.with(this, new Crashlytics());
     setContentView(R.layout.content_splash_screen)
-
-    window.insetsController?.apply {
-      hide(WindowInsets.Type.statusBars() or WindowInsets.Type.navigationBars())
-    }
-
+    window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
+    window.clearFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN)
     initUI()
   }
 
@@ -39,8 +33,7 @@ class SplashScreenActivity : Activity() {
     val intent = Intent(this, classToLaunch)
     finish()
     startActivity(intent)
-
-    Handler(Looper.getMainLooper()).postDelayed({ launchDeepLinkIfNeeded() }, 500)
+    Handler().postDelayed({ launchDeepLinkIfNeeded() }, 500)
   }
 
   private fun launchDeepLinkIfNeeded() {

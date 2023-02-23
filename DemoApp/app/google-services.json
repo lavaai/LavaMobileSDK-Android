@@ -1,1 +1,41 @@
-// Replace with your configuration
+{
+  "project_info": {
+    "project_number": "25747355969",
+    "firebase_url": "https://lava-1254.firebaseio.com",
+    "project_id": "lava-1254"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:25747355969:android:1b3ca0db4baa1e8b",
+        "android_client_info": {
+          "package_name": "ai.lava.demoapp.android"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "25747355969-297oslcs3595fjp2u55ejuveuq4bnlbm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA5oFASXJCwzsFeB27Ko-okACLj50LdiOM"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

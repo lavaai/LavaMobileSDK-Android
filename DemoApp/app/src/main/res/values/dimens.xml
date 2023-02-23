@@ -7,7 +7,6 @@
     <!--Login Screen-->
     <dimen name="toolbar_title_text_size">19sp</dimen>
     <dimen name="sign_in_screen_or_text_size">20sp</dimen>
-    <dimen name="mg_24dp">24dp</dimen>
 
 
 </resources>

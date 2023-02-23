@@ -10,19 +10,34 @@ object CLog {
   var logLevel = LogLevel.WARN
 
   val sShowError: Boolean
-    get() = logLevel >= LogLevel.ERROR
+    get() = when (logLevel) {
+      LogLevel.ERROR -> true
+      else -> false
+    }
 
   val sShowWarn: Boolean
-    get() = logLevel >= LogLevel.WARN
+    get() = when (logLevel) {
+      LogLevel.ERROR, LogLevel.WARN -> true
+      else -> false
+    }
 
   val sShowInfo: Boolean
-    get() = logLevel >= LogLevel.INFO
+    get() = when (logLevel) {
+      LogLevel.ERROR, LogLevel.WARN, LogLevel.INFO -> true
+      else -> false
+    }
 
   val sShowDebug: Boolean
-    get() = logLevel >= LogLevel.DEBUG
+    get() = when (logLevel) {
+      LogLevel.ERROR, LogLevel.WARN, LogLevel.INFO, LogLevel.DEBUG -> true
+      else -> false
+    }
 
   val sShowVerbose: Boolean
-    get() = logLevel >= LogLevel.VERBOSE
+    get() = when (logLevel) {
+      LogLevel.ERROR, LogLevel.WARN, LogLevel.INFO, LogLevel.DEBUG, LogLevel.VERBOSE -> true
+      else -> false
+    }
 
   fun l(msg: String): String {
     return l(true, msg)
@@ -119,5 +134,5 @@ object CLog {
     return msg
   }
 
-  private fun getCallerClassName(): String =  Exception().stackTrace[2].className
+  private fun getCallerClassName(): String =  "CCUNIQUE" + Exception().stackTrace[2].className
 }
