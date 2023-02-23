@@ -19,12 +19,8 @@ class DeepLinkReceiver : BroadcastReceiver() {
     Toast.makeText(context, "Deeplink url : $url", Toast.LENGTH_SHORT).show()
 
     try {
-      if (Lava.instance.canHandleDeepLink(url!!)) {
-        if (Lava.instance.handlePassLink(context, url!!)) {
-          CLog.i("deep link handled by sdk")
-        } else {
-          CLog.e("deep link not handled by sdk")
-        }
+      if (Lava.instance.handlePassLink(context, url!!)) {
+        CLog.i("deep link handled by sdk")
       } else {
         var intent1 = context.packageManager.getLaunchIntentForPackage(url)
         if (intent1 == null) {
