@@ -12,8 +12,9 @@ import ai.lava.demoapp.android.profile.ProfileFragment
 import ai.lava.demoapp.android.utils.GenericUtils
 import android.content.Intent
 import android.content.res.Configuration
+import android.graphics.PorterDuff
+import android.graphics.drawable.Drawable
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.view.Menu
 import android.view.View
 import android.view.WindowManager
@@ -24,6 +25,7 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
+import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
@@ -43,16 +45,18 @@ class MainActivity : BaseActivity(), View.OnClickListener {
     private var tvDebug: TextView? = null
     private var tvShowDebugInfo: TextView? = null
     private var tvDemo: TextView? = null
+    private var prevClickedId = -1
     private var tvInboxMessage: TextView? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         isAlive = true
         setContentView(R.layout.activity_main)
         changeStatusBarColor()
         initUI()
         setUpUI()
+
+        // CLog.e("onCreate() called with: " + "savedInstanceState = [" + savedInstanceState + "]");
     }
 
     private fun setUpUI() {
@@ -64,17 +68,11 @@ class MainActivity : BaseActivity(), View.OnClickListener {
         tvDemo!!.setOnClickListener(this)
         tvInboxMessage!!.setOnClickListener(this)
         setToolbarTile(R.id.tv_profile)
+        // addFragments(new LVProfileFragment(), false, false);
         tvPrevious = tvProfile
         changeTextColor(tvProfile)
         toolbar!!.findViewById<View>(R.id.toolbar_save).setOnClickListener(this)
-
-        val prevClickedIdFromBundle = getIntent().getIntExtra("prevClickedId", -1)
-
-        if (prevClickedIdFromBundle == -1) {
-            tvProfile!!.performClick()
-        } else {
-            selectTile(prevClickedIdFromBundle)
-        }
+        tvProfile!!.performClick()
     }
 
     private fun initUI() {
@@ -150,14 +148,32 @@ class MainActivity : BaseActivity(), View.OnClickListener {
         mDrawerToggle?.setDrawerIndicatorEnabled(true)
         mDrawerToggle?.let { mDrawerLayout?.addDrawerListener(it) }
         mDrawerToggle?.syncState()
-    }
-
-    override fun onPause() {
-        super.onPause()
-    }
-
-    override fun onSaveInstanceState(outState: Bundle, outPersistentState: PersistableBundle) {
-        super.onSaveInstanceState(outState, outPersistentState)
+//        supportFragmentManager.addOnBackStackChangedListener {
+//            if (supportFragmentManager.backStackEntryCount > 0) {
+//                val upArrow: Drawable?
+//                try {
+//                    upArrow = getDrawable(R.drawable.navigation_back)
+//                    upArrow!!.setColorFilter(getColor(R.color.white), PorterDuff.Mode.SRC_ATOP)
+//                    supportActionBar?.setHomeAsUpIndicator(upArrow)
+//                } catch (e: NullPointerException) {
+//                    e.printStackTrace()
+//                }
+//                supportActionBar?.setDisplayHomeAsUpEnabled(true) // show back button
+//                toolbar!!.setNavigationOnClickListener { onBackPressed() }
+//            } else {
+//                //show hamburger
+//                supportActionBar?.setDisplayHomeAsUpEnabled(false)
+//                mDrawerToggle?.syncState()
+//                toolbar?.setNavigationOnClickListener {
+//                    if (mDrawerLayout?.isDrawerOpen(GravityCompat.START) == true) {
+//                        //drawer is open
+//                        mDrawerLayout?.closeDrawer(leftDrawer!!)
+//                    } else {
+//                        mDrawerLayout?.openDrawer(GravityCompat.START)
+//                    }
+//                }
+//            }
+//        }
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
@@ -178,17 +194,16 @@ class MainActivity : BaseActivity(), View.OnClickListener {
     }
 
     override fun onClick(v: View) {
-        if (prevClickedId == v.id) {
+        val id = v.id
+        GenericUtils.hideKeyboard(this)
+        setToolbarTile(id)
+        //if (id != R.id.tv_chat) {
+        changeTextColor(v)
+        //}
+        if (prevClickedId == id) {
             closeDrawer()
             return
         }
-        changeTextColor(v)
-        selectTile(v.id)
-    }
-
-    private fun selectTile(id: Int) {
-        GenericUtils.hideKeyboard(this)
-        setToolbarTile(id)
         prevClickedId = id
         when (id) {
             R.id.tv_account_setting -> {
@@ -359,6 +374,8 @@ class MainActivity : BaseActivity(), View.OnClickListener {
 
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
+        //intent = intent
+        //CLog.l("onNewIntent() called with: " + "intent = [" + intent + "]");
     }
 
     private fun openLogoutDialog() {
@@ -375,6 +392,5 @@ class MainActivity : BaseActivity(), View.OnClickListener {
 
     companion object {
         var isAlive = false
-        var prevClickedId = -1
     }
 }

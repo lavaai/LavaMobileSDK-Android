@@ -118,7 +118,7 @@ class SignInFragment : Fragment(), View.OnClickListener {
 
     ProgressUtils.showProgress(activity, false)
 
-    val body = LoginRequest(email = username!!, password = password)
+    val body = LoginRequest(email = username!!, password = password!!)
 
     RestClient.login(body, object: ApiResultListener {
       override fun onResult(success: Boolean, authResponse: AuthResponse?, errorMessage: String?) {

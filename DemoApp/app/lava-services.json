@@ -1,1 +1,5 @@
-// Replace with your configuration
+{
+  "clientId": "gcp2dev-backend.test",
+  "appKey": "test-access-key",
+  "enableSecureMemberToken": true
+}
