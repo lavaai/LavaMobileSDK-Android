@@ -1,1 +1,5 @@
-// Replace with your configuration
+{
+  "clientId": "",
+  "appKey": "",
+  "enableSecureMemberToken": false
+}

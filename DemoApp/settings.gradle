@@ -1,6 +1,24 @@
-include ':app'
+def property = new Properties()
+file("project.properties").withInputStream { property.load(it) }
 
-if (debugLavaSdkBuild.toBoolean()) {
-    include ':lavasdk'
-    project(':lavasdk').projectDir = new File(settingsDir, '../SDK-Android/lavasdk')
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+        mavenLocal()
+        maven { url 'https://maven.fabric.io/public' }
+        maven {
+            url = uri("https://maven.pkg.github.com/lavaai/LavaMobileSDK-Android")
+            credentials {
+                username = property.get("GITHUB_USERNAME")
+                password = property.get("GITHUB_PERSONAL_ACCESS_TOKEN")
+            }
+        }
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
 }
+
+include ':app'
