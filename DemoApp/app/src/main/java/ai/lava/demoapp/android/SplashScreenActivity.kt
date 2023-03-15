@@ -10,6 +10,8 @@ import android.os.Handler
 import android.os.Looper
 import android.view.WindowInsets
 import android.view.WindowManager
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import com.lava.lavasdk.Lava
 
 //import io.fabric.sdk.android.Fabric;
@@ -19,8 +21,8 @@ class SplashScreenActivity : Activity() {
     //Fabric.with(this, new Crashlytics());
     setContentView(R.layout.content_splash_screen)
 
-    window.insetsController?.apply {
-      hide(WindowInsets.Type.statusBars() or WindowInsets.Type.navigationBars())
+    WindowInsetsControllerCompat(window, window.decorView.rootView).apply {
+      hide(WindowInsetsCompat.Type.statusBars() or WindowInsetsCompat.Type.navigationBars())
     }
 
     initUI()

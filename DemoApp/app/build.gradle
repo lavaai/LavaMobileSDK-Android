@@ -19,7 +19,7 @@ android {
 
     defaultConfig {
         applicationId "ai.lava.demoapp.android"
-        minSdk 31
+        minSdk 23
         targetSdkVersion 31
         versionCode 1
         versionName "0.9.0"
@@ -48,7 +48,7 @@ android {
         demo {
             applicationId "ai.lava.demoapp.android"
             versionName "0.9.0"
-            minSdkVersion 31
+            minSdkVersion 23
             targetSdkVersion 31
         }
     }
