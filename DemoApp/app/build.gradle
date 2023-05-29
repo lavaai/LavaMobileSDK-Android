@@ -68,6 +68,8 @@ android {
     }
 
     compileOptions {
+        coreLibraryDesugaringEnabled true
+
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
@@ -78,6 +80,7 @@ android {
 }
 
 dependencies {
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.5'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.2'
 
     implementation 'com.google.code.gson:gson:2.8.9'
@@ -104,6 +107,7 @@ dependencies {
     implementation 'com.squareup.okio:okio:2.8.0'
 
     implementation 'com.auth0.android:jwtdecode:2.0.1'
+//    implementation project(path: ':lavasdk')
     // Please add a specific version number instead of +, this is only for development purpose
     implementation 'ai.lava.mobile-sdk:lavasdk:+'
 }
