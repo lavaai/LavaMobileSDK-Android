@@ -1,3 +1,7 @@
+// These settings are for local development
+//include ':lavasdk'
+//project(':lavasdk').projectDir = new File('../../SDK-Android/lavasdk')
+
 def property = new Properties()
 file("project.properties").withInputStream { property.load(it) }
 

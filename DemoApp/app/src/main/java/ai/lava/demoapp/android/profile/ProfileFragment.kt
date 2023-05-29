@@ -2,6 +2,7 @@ package ai.lava.demoapp.android.profile
 
 import ai.lava.demoapp.android.R
 import ai.lava.demoapp.android.utils.CLog
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.lava.lavasdk.*
+import com.lava.lavasdk.internal.inbox.InboxStyle
 
 class ProfileFragment : Fragment(), View.OnClickListener {
   private var tvFirstName: TextView? = null
@@ -39,6 +41,9 @@ class ProfileFragment : Fragment(), View.OnClickListener {
     tvPhoneNumber = view.findViewById(R.id.tv_phone_number)
     tvEmailId = view.findViewById(R.id.tv_email_id)
     view.findViewById<View>(R.id.tvInAppPass).setOnClickListener(this)
+    view.findViewById<View>(R.id.tvSDKInbox).setOnClickListener(this)
+    view.findViewById<View>(R.id.tvSDKCustomInbox).setOnClickListener(this)
+    view.findViewById<View>(R.id.tvSDKListenerInbox).setOnClickListener(this)
   }
 
   private fun setUpUI() {
@@ -82,9 +87,37 @@ class ProfileFragment : Fragment(), View.OnClickListener {
 
   override fun onClick(view: View) {
     when (view.id) {
+
       R.id.tvInAppPass -> {
         activity?.let{ Lava.instance.showInAppPass(it, "test-app-token") }
       }
+
+      R.id.tvSDKInbox -> {
+        activity?.let {
+          Lava.instance.showInboxMessages(it)
+        }
+      }
+
+      R.id.tvSDKCustomInbox -> {
+        activity?.let {
+          val style = InboxStyle(indicatorColor = Color.BLUE, titleTextColor = Color.BLUE)
+          Lava.instance.showInboxMessages(it, style)
+        }
+      }
+
+      R.id.tvSDKListenerInbox -> {
+        activity?.let {
+          val listener = object: InboxMessageListener {
+            override fun onViewMessage(message: InboxMessage) {
+              val event = Track(action = Track.ACTION_VIEW_SCREEN, category = "Inbox", userParams = message.toNotificationData())
+              Lava.instance.track(event)
+            }
+          }
+
+          Lava.instance.showInboxMessages(it, listener)
+        }
+      }
+
     }
   }
 }
