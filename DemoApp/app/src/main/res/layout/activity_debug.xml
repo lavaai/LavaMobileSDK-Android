@@ -30,7 +30,7 @@
             android:layout_alignParentEnd="true"
             android:layout_margin="10dp"
             android:background="@color/fully_transparent"
-            android:src="@drawable/close" />
+            android:src="@drawable/test_close" />
 
         <ScrollView
             android:id="@+id/scDebugInfoContainer"
