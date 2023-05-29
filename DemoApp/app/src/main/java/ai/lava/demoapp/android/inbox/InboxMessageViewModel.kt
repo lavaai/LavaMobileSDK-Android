@@ -95,6 +95,10 @@ class InboxMessageViewModel(application: Application) : AndroidViewModel(applica
     }
 
     try {
+      /**
+       * This is an alternative way to display the overlay for Inbox messages
+       */
+      /*
       Lava.instance.handleNotification(
         ctx.applicationContext, MainActivity::class.java, message.toNotificationData(),
         object: ResultListener {
@@ -105,6 +109,17 @@ class InboxMessageViewModel(application: Application) : AndroidViewModel(applica
           }
         }
       )
+      */
+
+      /**
+       * This is a newer method to display an overlay
+       */
+      Lava.instance.showMessage(
+        ctx.applicationContext,
+        MainActivity::class.java,
+        message
+      )
+
       if (message.read) {
         CLog.d("Update Inbox message state not triggered - Message is already read")
         return
