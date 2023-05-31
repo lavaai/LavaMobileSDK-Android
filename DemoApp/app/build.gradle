@@ -99,17 +99,22 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.0"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 
-    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
-    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
-    implementation 'com.squareup.retrofit2:converter-scalars:2.9.0'
-    implementation 'com.squareup.okhttp3:okhttp:4.9.0'
-    implementation 'com.squareup.okhttp3:logging-interceptor:4.9.0'
-    implementation 'com.squareup.okio:okio:2.8.0'
+    if (debugLavaSdkBuild.toBoolean()) {
+        implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+        implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+        implementation 'com.squareup.retrofit2:converter-scalars:2.9.0'
+        implementation 'com.squareup.okhttp3:okhttp:4.9.0'
+        implementation 'com.squareup.okhttp3:logging-interceptor:4.9.0'
+        implementation 'com.squareup.okio:okio:2.8.0'
+        implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
+        // Disable the below file for using the local SDK project instead
+        implementation fileTree(dir: "libs", include: ["*.aar"])
+//        implementation project(path: ':lavasdk')
+    } else {
+        implementation useLavaSdkMavenPackageVersion
+    }
 
     implementation 'com.auth0.android:jwtdecode:2.0.1'
-//    implementation project(path: ':lavasdk')
-    // Please add a specific version number instead of +, this is only for development purpose
-    implementation 'ai.lava.mobile-sdk:lavasdk:+'
 }
 
 apply plugin: 'com.google.gms.google-services'
