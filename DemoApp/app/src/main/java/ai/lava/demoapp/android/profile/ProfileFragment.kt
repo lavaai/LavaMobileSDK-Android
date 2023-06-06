@@ -43,7 +43,6 @@ class ProfileFragment : Fragment(), View.OnClickListener {
     view.findViewById<View>(R.id.tvInAppPass).setOnClickListener(this)
     view.findViewById<View>(R.id.tvSDKInbox).setOnClickListener(this)
     view.findViewById<View>(R.id.tvSDKCustomInbox).setOnClickListener(this)
-    view.findViewById<View>(R.id.tvSDKListenerInbox).setOnClickListener(this)
   }
 
   private fun setUpUI() {
@@ -103,12 +102,7 @@ class ProfileFragment : Fragment(), View.OnClickListener {
           val style = InboxStyle()
             .setTitleTextColor(Color.BLUE)
             .setIndicatorColor(Color.MAGENTA)
-          Lava.instance.showInboxMessages(it, style)
-        }
-      }
 
-      R.id.tvSDKListenerInbox -> {
-        activity?.let {
           val listener = object: InboxMessageListener {
             override fun onViewMessage(message: InboxMessage) {
               val event = Track()
@@ -119,7 +113,7 @@ class ProfileFragment : Fragment(), View.OnClickListener {
             }
           }
 
-          Lava.instance.showInboxMessages(it, listener)
+          Lava.instance.showInboxMessages(it, listener, style)
         }
       }
 
