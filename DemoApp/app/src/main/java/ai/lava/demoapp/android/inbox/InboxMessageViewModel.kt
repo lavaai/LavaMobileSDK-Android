@@ -114,7 +114,7 @@ class InboxMessageViewModel(application: Application) : AndroidViewModel(applica
       /**
        * This is a newer method to display an overlay
        */
-      Lava.instance.showMessage(
+      Lava.instance.showInboxMessage(
         ctx.applicationContext,
         MainActivity::class.java,
         message
