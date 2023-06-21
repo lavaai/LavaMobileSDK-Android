@@ -3,6 +3,8 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+    <color name="colorAccentDark">#CC1F5A</color>
+
     <color name="black">#000000</color>
     <color name="white">#FFFFFF</color>
 
@@ -32,4 +34,6 @@
     <color name="analytics_green">#4db31e</color>
     <color name="analytics_blue">#223bdd</color>
     <color name="analytics_yellow">#ddc122</color>
+    <color name="purple">#8e44ad</color>
+    <color name="blue">#2980b9</color>
 </resources>

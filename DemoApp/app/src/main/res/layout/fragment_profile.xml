@@ -109,24 +109,50 @@
 
         </LinearLayout>
 
-
-        <RelativeLayout
+        <TextView
+            android:id="@+id/tvInAppPass"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="15dp"
-            android:layout_marginTop="5dp">
+            android:layout_centerInParent="true"
+            android:background="@drawable/selector_general_button"
+            android:padding="16dp"
+            android:text="Show In App Pass"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:layout_marginTop="15dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            />
 
-            <TextView
-                android:id="@+id/tvInAppPass"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:background="@color/red"
-                android:padding="10dp"
-                android:text="Show In App Pass"
-                android:textAlignment="center"
-                android:textColor="@color/white" />
-        </RelativeLayout>
+        <TextView
+            android:id="@+id/tvSDKInbox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:background="@drawable/selector_general_button"
+            android:padding="16dp"
+            android:text="Show Default Built-in Inbox"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:layout_marginTop="15dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            />
+
+        <TextView
+            android:id="@+id/tvSDKCustomInbox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:background="@drawable/selector_general_button"
+            android:padding="16dp"
+            android:text="Show Custom Built-in Inbox"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:layout_marginTop="15dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            />
 
     </LinearLayout>
 
