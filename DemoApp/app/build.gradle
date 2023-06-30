@@ -81,6 +81,7 @@ android {
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_1_8
     }
+    namespace 'ai.lava.demoapp.android'
 }
 
 dependencies {
