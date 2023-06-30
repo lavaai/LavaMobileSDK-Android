@@ -18,7 +18,7 @@ class MyFcmMessageService : FirebaseMessagingService() {
     if (data.isNotEmpty()) {
       if (Lava.instance.canHandlePushNotification(remoteMessage.data)) {
         val b = Bundle()
-        b.putInt("prevClickedId", MainActivity.prevClickedId)
+        b.putInt("prevClickedId", MainActivity.selectedTab)
         if (!Lava.instance.handleNotification(applicationContext, MainActivity::class.java, data, null, b)) {
           CLog.e("Lava did not handle notification")
         }

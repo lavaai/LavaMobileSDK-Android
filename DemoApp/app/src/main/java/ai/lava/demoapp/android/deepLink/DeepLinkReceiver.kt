@@ -20,7 +20,7 @@ class DeepLinkReceiver : BroadcastReceiver() {
 
     try {
       if (Lava.instance.canHandleDeepLink(url!!)) {
-        if (Lava.instance.handlePassLink(context, url!!)) {
+        if (Lava.instance.handleDeepLink(context, url!!)) {
           CLog.i("deep link handled by sdk")
         } else {
           CLog.e("deep link not handled by sdk")
