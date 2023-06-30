@@ -67,14 +67,6 @@ class MainActivity : BaseActivity(), View.OnClickListener {
         tvPrevious = tvProfile
         changeTextColor(tvProfile)
         toolbar!!.findViewById<View>(R.id.toolbar_save).setOnClickListener(this)
-
-        val prevClickedIdFromBundle = getIntent().getIntExtra("prevClickedId", -1)
-
-        if (prevClickedIdFromBundle == -1) {
-            tvProfile!!.performClick()
-        } else {
-            selectTile(prevClickedIdFromBundle)
-        }
     }
 
     private fun initUI() {
@@ -93,6 +85,20 @@ class MainActivity : BaseActivity(), View.OnClickListener {
         version.text = "Version " + GenericUtils.getVersionName(this)
         setSupportActionBar(toolbar)
         setupDrawer()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        if (selectedTab == -1) {
+            selectedTab = getIntent().getIntExtra("prevClickedId", -1)
+        }
+
+        if (selectedTab != -1) {
+            selectTile(selectedTab)
+            return
+        }
+
+        selectTile(R.id.tv_profile)
     }
 
     private fun setToolbarTile(id: Int) {
@@ -156,8 +162,9 @@ class MainActivity : BaseActivity(), View.OnClickListener {
         super.onPause()
     }
 
-    override fun onSaveInstanceState(outState: Bundle, outPersistentState: PersistableBundle) {
-        super.onSaveInstanceState(outState, outPersistentState)
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putInt("prevClickedId", selectedTab)
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
@@ -178,7 +185,7 @@ class MainActivity : BaseActivity(), View.OnClickListener {
     }
 
     override fun onClick(v: View) {
-        if (prevClickedId == v.id) {
+        if (selectedTab == v.id) {
             closeDrawer()
             return
         }
@@ -189,7 +196,7 @@ class MainActivity : BaseActivity(), View.OnClickListener {
     private fun selectTile(id: Int) {
         GenericUtils.hideKeyboard(this)
         setToolbarTile(id)
-        prevClickedId = id
+        selectedTab = id
         when (id) {
             R.id.tv_account_setting -> {
                 closeDrawer()
@@ -199,7 +206,7 @@ class MainActivity : BaseActivity(), View.OnClickListener {
             R.id.tv_log_out -> {
                 closeDrawer()
                 openLogoutDialog()
-                prevClickedId = -1
+                selectedTab = -1
             }
             R.id.tv_profile -> {
                 closeDrawer()
@@ -217,7 +224,7 @@ class MainActivity : BaseActivity(), View.OnClickListener {
             R.id.tv_show_debug -> {
                 closeDrawer()
                 DebugActivity.showDebugInfo(this)
-                prevClickedId = -1
+                selectedTab = -1
             }
             R.id.tv_demo -> {
                 closeDrawer()
@@ -375,6 +382,6 @@ class MainActivity : BaseActivity(), View.OnClickListener {
 
     companion object {
         var isAlive = false
-        var prevClickedId = -1
+        var selectedTab = -1
     }
 }
