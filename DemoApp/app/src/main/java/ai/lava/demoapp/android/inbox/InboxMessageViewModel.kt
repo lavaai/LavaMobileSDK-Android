@@ -79,7 +79,8 @@ class InboxMessageViewModel(application: Application) : AndroidViewModel(applica
   fun displayMessage(ctx: Context, index: Int, message: InboxMessage) {
     displayInboxMessage(ctx, message)
     val messages = inboxMessageList.value
-    messages?.set(index, messages[index].copy("", "", Instant.now(), Instant.now(), true, ""))
+    val updatedMessage = message.copy(read=true)
+    messages?.set(index, updatedMessage)
     inboxMessageList.value = messages
   }
 
