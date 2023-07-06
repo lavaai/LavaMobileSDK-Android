@@ -87,7 +87,7 @@ class NotificationInboxEditFragment : Fragment(), View.OnClickListener {
   }
 
   private fun setUpMessageList() {
-    mInboxMessageViewModel?.inboxMessageList?.observe(this, { inboxMessages ->
+    mInboxMessageViewModel?.inboxMessageList?.observe(viewLifecycleOwner) { inboxMessages ->
       if (inboxMessages != null && inboxMessages.size > 0) {
         mRvInboxMessage?.visibility = View.VISIBLE
         handleMessageListObtained(inboxMessages)
@@ -95,7 +95,7 @@ class NotificationInboxEditFragment : Fragment(), View.OnClickListener {
         mRvInboxMessage?.visibility = View.GONE
       }
       mAdapter?.notifyDataSetChanged()
-    })
+    }
   }
 
   private fun handleMessageListObtained(list: List<InboxMessage>) {

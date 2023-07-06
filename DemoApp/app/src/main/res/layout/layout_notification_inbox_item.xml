@@ -4,21 +4,23 @@
     android:id="@+id/rlCameraContainer"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/background_dark_white">
+    android:background="@color/white">
 
     <View
+        android:id="@+id/vDivider"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_alignParentTop="true"
-        android:background="@color/black" />
+        android:background="@color/lava_light_gray"
+        />
 
     <View
         android:id="@+id/vDotView"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
+        android:layout_width="12dp"
+        android:layout_height="12dp"
         android:layout_centerVertical="true"
         android:layout_marginBottom="8dp"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:background="@drawable/layout_message_uread_indicator"
         android:visibility="invisible" />
@@ -27,19 +29,22 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginStart="8dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
         android:layout_toEndOf="@+id/vDotView"
+        android:layout_below="@id/vDivider"
         android:orientation="vertical">
 
         <TextView
             android:id="@+id/tvMessageTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/black"
+            android:textColor="@color/textDark"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:layout_marginBottom="8dp"
             tools:text="Id : 123" />
 
 
@@ -47,28 +52,28 @@
             android:id="@+id/tvMessageId"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/black"
+            android:textColor="@color/textLight"
             tools:text="Id : 123" />
 
         <TextView
             android:id="@+id/tvMessageCreatedDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/black"
+            android:textColor="@color/textLight"
             tools:text="Id : 123" />
 
         <TextView
             android:id="@+id/tvMessageExpirationDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/black"
+            android:textColor="@color/textLight"
             tools:text="Id : 123" />
 
         <TextView
             android:id="@+id/tvMessageStatus"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/black"
+            android:textColor="@color/textLight"
             android:visibility="gone"
             tools:text="Id : 123" />
 

@@ -15,6 +15,10 @@
     <color name="loginButton">#EC0086</color>
     <color name="background_dark_white">#EFEFF4</color>
 
+    <color name="textDark">#444444</color>
+    <color name="textLight">#AAAAAA</color>
+
+    black
     //User Home
     <color name="profileBackground">#67A8F6</color>
     <color name="profileBorder">#AAAAAA</color>

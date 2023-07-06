@@ -33,8 +33,6 @@ class LavaApplication : MultiDexApplication(), SecureMemberTokenExpiryListener {
         val customStyle = Style()
             .setTitleFont(Typeface.createFromAsset(applicationContext.assets, "fonts/poppins_bold.ttf"))
             .setContentFont(Typeface.createFromAsset(applicationContext.assets, "fonts/poppins_regular.ttf"))
-            .setBackgroundColor(Color.BLACK)
-            .setTitleTextColor(Color.GREEN)
             .setContentTextColor(Color.LTGRAY)
             .setCloseImage(R.drawable.test_close)
 

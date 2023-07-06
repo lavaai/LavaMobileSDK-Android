@@ -38,14 +38,14 @@ class NotificationInboxAdapter(
 
       val title = nimb.title
       if (!TextUtils.isEmpty(title)) {
-        holder.tvNotificationMessageTitle.text = "Title : $title"
+        holder.tvNotificationMessageTitle.text = title
       } else {
         holder.tvNotificationMessageTitle.visibility = View.GONE
       }
 
       val id = nimb.messageId
       if (!TextUtils.isEmpty(id)) {
-        holder.tvNotificationMessageId.text = "Id : $id"
+        holder.tvNotificationMessageId.text = "ID: $id"
       } else {
         holder.tvNotificationMessageId.visibility = View.GONE
       }
