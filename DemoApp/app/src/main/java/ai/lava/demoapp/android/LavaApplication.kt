@@ -13,9 +13,7 @@ import android.graphics.Typeface
 import androidx.multidex.MultiDex
 import androidx.multidex.MultiDexApplication
 import com.google.firebase.messaging.FirebaseMessaging
-import com.lava.lavasdk.Lava
-import com.lava.lavasdk.LavaLogLevel
-import com.lava.lavasdk.SecureMemberTokenExpiryListener
+import com.lava.lavasdk.*
 import com.lava.lavasdk.internal.Style
 
 class LavaApplication : MultiDexApplication(), SecureMemberTokenExpiryListener {
@@ -27,8 +25,15 @@ class LavaApplication : MultiDexApplication(), SecureMemberTokenExpiryListener {
             BuildConfig.clientId,
             R.drawable.app_icon_shil.toString(),
             LavaLogLevel.VERBOSE,
-            LavaLogLevel.VERBOSE
+            LavaLogLevel.VERBOSE,
+            piConsentFlags = setOf(
+                    LavaPIConsentFlag.StrictlyNecessary,
+                    LavaPIConsentFlag.PerformanceAndLogging,
+                    LavaPIConsentFlag.Functional
+            )
         )
+
+        // Lava.instance.setPIConsentFlags(setOf(LavaPIConsentFlag.StrictlyNecessary, LavaPIConsentFlag.Functional))
 
         val customStyle = Style()
             .setTitleFont(Typeface.createFromAsset(applicationContext.assets, "fonts/poppins_bold.ttf"))
