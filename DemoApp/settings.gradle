@@ -1,5 +1,4 @@
 // These settings are for local development
-
 if (debugLavaSdkBuild.toBoolean()) {
     include ':lavasdk'
     project(':lavasdk').projectDir = new File('../../SDK-Android/lavasdk')

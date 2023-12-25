@@ -8,10 +8,12 @@ import ai.lava.demoapp.android.api.AuthResponse
 import ai.lava.demoapp.android.api.LoginRequest
 import ai.lava.demoapp.android.api.RestClient
 import ai.lava.demoapp.android.common.AppSession
+import ai.lava.demoapp.android.consent.ConsentActivity
 import ai.lava.demoapp.android.debug.DebugActivity
 import ai.lava.demoapp.android.utils.CLog
 import ai.lava.demoapp.android.utils.GenericUtils
 import ai.lava.demoapp.android.utils.ProgressUtils
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -23,7 +25,6 @@ import com.lava.lavasdk.ResultListener
 import com.lava.lavasdk.Track
 
 class SignInFragment : Fragment(), View.OnClickListener {
-  private var btLogin: Button? = null
   private var etUserName: EditText? = null
   private var etPassword: EditText? = null
   private var btShowDebugInfo: Button? = null
@@ -59,16 +60,16 @@ class SignInFragment : Fragment(), View.OnClickListener {
   }
 
   private fun initUI(view: View) {
-    btLogin = view.findViewById(R.id.bt_login)
-    btShowDebugInfo = view.findViewById(R.id.bt_show_debug)
-    btInboxMessage = view.findViewById(R.id.bt_inbox_message)
+    btShowDebugInfo = view.findViewById(R.id.btnShowDebug)
+    btInboxMessage = view.findViewById(R.id.btnInboxMessage)
     etUserName = view.findViewById(R.id.et_email)
     etPassword = view.findViewById(R.id.et_password)
     rlViewContainer = view.findViewById(R.id.rl_login_container)
   }
 
   private fun setUpUI() {
-    btLogin!!.setOnClickListener(this)
+    view?.findViewById<TextView>(R.id.bt_login)?.setOnClickListener(this)
+    view?.findViewById<TextView>(R.id.btnConsentPref)?.setOnClickListener(this)
     btShowDebugInfo!!.setOnClickListener(this)
     btInboxMessage!!.setOnClickListener(this)
     rlViewContainer!!.setOnClickListener(this)
@@ -79,13 +80,17 @@ class SignInFragment : Fragment(), View.OnClickListener {
 
     when (v.id) {
       R.id.bt_login -> doLogin()
-      R.id.bt_show_debug -> showDebugInfo()
-      R.id.bt_inbox_message -> (activity as LoginActivity?)!!.addInboxMessageScreen()
+      R.id.btnShowDebug -> showDebugInfo()
+      R.id.btnInboxMessage -> (activity as LoginActivity?)!!.addInboxMessageScreen()
       R.id.rl_login_container -> {
         remaining--
         if (remaining <= 0) {
           remaining = 3
         }
+      }
+      R.id.btnConsentPref -> {
+        val intent = Intent(context, ConsentActivity::class.java)
+        startActivity(intent)
       }
       else -> {}
     }

@@ -1,7 +1,9 @@
 package ai.lava.demoapp.android.profile
 
 import ai.lava.demoapp.android.R
+import ai.lava.demoapp.android.consent.ConsentActivity
 import ai.lava.demoapp.android.utils.CLog
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -43,6 +45,7 @@ class ProfileFragment : Fragment(), View.OnClickListener {
     view.findViewById<View>(R.id.tvInAppPass).setOnClickListener(this)
     view.findViewById<View>(R.id.tvSDKInbox).setOnClickListener(this)
     view.findViewById<View>(R.id.tvSDKCustomInbox).setOnClickListener(this)
+    view.findViewById<View>(R.id.tvConsentDialog).setOnClickListener(this)
   }
 
   private fun setUpUI() {
@@ -117,6 +120,11 @@ class ProfileFragment : Fragment(), View.OnClickListener {
         }
       }
 
+      R.id.tvConsentDialog -> {
+        val intent = Intent(context, ConsentActivity::class.java)
+        startActivity(intent)
+      }
     }
+
   }
 }

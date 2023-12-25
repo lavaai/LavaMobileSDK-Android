@@ -5,6 +5,7 @@ import ai.lava.demoapp.android.api.AuthResponse
 import ai.lava.demoapp.android.api.RefreshTokenRequest
 import ai.lava.demoapp.android.api.RestClient
 import ai.lava.demoapp.android.common.AppSession
+import ai.lava.demoapp.android.consent.ConsentUtils
 import ai.lava.demoapp.android.deepLink.DeepLinkReceiver
 import ai.lava.demoapp.android.utils.CLog
 import android.content.Context
@@ -27,7 +28,8 @@ class LavaApplication : MultiDexApplication(), SecureMemberTokenExpiryListener {
             BuildConfig.clientId,
             R.drawable.app_icon_shil.toString(),
             LavaLogLevel.VERBOSE,
-            LavaLogLevel.VERBOSE
+            LavaLogLevel.VERBOSE,
+            ConsentUtils.getStoredConsentFlags()
         )
 
         val customStyle = Style()

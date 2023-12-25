@@ -17,14 +17,14 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlinx-serialization'
 
 android {
-    compileSdk 31
+    compileSdk 33
 
     flavorDimensions = ["default"]
 
     defaultConfig {
         applicationId "ai.lava.demoapp.android"
         minSdk 23
-        targetSdkVersion 31
+        targetSdk 33
         versionCode 1
         versionName "0.9.0"
         multiDexEnabled true
@@ -36,6 +36,13 @@ android {
             buildConfigField("String", "clientId", "\"${lavaServicesJson.clientId}\"")
             buildConfigField("String", "appKey", "\"${lavaServicesJson.appKey}\"")
             buildConfigField("String", "enableSecureMemberToken", "\"${lavaServicesJson.enableSecureMemberToken}\"")
+        }
+
+        configurations.all {
+            resolutionStrategy {
+                force("androidx.emoji2:emoji2-views-helper:1.3.0")
+                force("androidx.emoji2:emoji2:1.3.0")
+            }
         }
     }
 
@@ -81,9 +88,31 @@ android {
     lint {
         abortOnError false
     }
+
+    buildFeatures {
+        compose true
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion "1.4.2"
+    }
 }
 
 dependencies {
+    def composeBom = platform('androidx.compose:compose-bom:2023.01.00')
+    implementation composeBom
+    androidTestImplementation composeBom
+
+    implementation 'androidx.compose.material3:material3'
+    implementation 'androidx.compose.ui:ui-tooling-preview'
+    debugImplementation 'androidx.compose.ui:ui-tooling'
+    androidTestImplementation 'androidx.compose.ui:ui-test-junit4'
+    debugImplementation 'androidx.compose.ui:ui-test-manifest'
+    implementation 'androidx.compose.material:material-icons-core'
+    implementation 'androidx.compose.material:material-icons-extended'
+    implementation 'androidx.activity:activity-compose:1.6.1'
+    implementation "androidx.datastore:datastore-preferences:1.0.0"
+
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.5'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.2'
 
@@ -97,7 +126,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-crashlytics'
     implementation 'com.google.firebase:firebase-analytics'
 
-    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.4.0'
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.6.2'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
     implementation "androidx.core:core-ktx:1.7.0"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.0"
