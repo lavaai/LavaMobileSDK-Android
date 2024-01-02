@@ -28,7 +28,7 @@ internal class AppSession(context: Context) {
     }
 
     fun getConsentFlags(): Set<ConsentFlag> {
-        val raw = sp.getStringSet(KeyConsentFlags, emptySet())
+        val raw = sp.getStringSet(KeyConsentFlags, ConsentFlag.values().map { it.flag }.toSet())
         return raw!!.mapNotNull { flagString ->
             ConsentFlag.values().firstOrNull { it.flag == flagString }
         }.toSet()

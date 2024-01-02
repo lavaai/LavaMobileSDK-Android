@@ -8,53 +8,91 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.Toast
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Image
+import androidx.compose.material.icons.rounded.Newspaper
+import androidx.compose.material.icons.rounded.VideoLibrary
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ButtonElevation
+import androidx.compose.material3.ElevatedButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.compose.ui.unit.dp
+import androidx.core.graphics.ColorUtils
 import androidx.fragment.app.Fragment
 import com.lava.lavasdk.Lava
 import com.lava.lavasdk.Track
 import java.util.*
 
-class AnalyticsDemoFragment : Fragment(), View.OnClickListener {
-  private var btVideo1: Button? = null
-  private var btVideo2: Button? = null
-  private var btImage1: Button? = null
-  private var btImage2: Button? = null
-  private var btArticle1: Button? = null
-  private var btArticle2: Button? = null
+class AnalyticsDemoFragment : Fragment() {
+
   private var mToast: Toast? = null
-  override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-    val view = inflater.inflate(R.layout.fragment_demo, container, false)
-    initUI(view)
-    setUpUI()
-    return view
-  }
+  override fun onCreateView(
+    inflater: LayoutInflater,
+    container: ViewGroup?,
+    savedInstanceState: Bundle?
+  ): View? {
+    return ComposeView(requireContext()).apply {
+      setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
+      setContent {
+        MaterialTheme {
+          Surface(color = MaterialTheme.colorScheme.primary) {
+            Column(modifier = Modifier
+              .fillMaxWidth()
+              .padding(16.dp)
+            ) {
+              trackedButton(trackCategory = "Video 1", buttonLabel = "View Video 1", icon = Icons.Rounded.VideoLibrary)
+              trackedButton(trackCategory = "Video 2", buttonLabel = "View Video 2", icon = Icons.Rounded.VideoLibrary)
 
-  private fun initUI(view: View) {
-    btVideo1 = view.findViewById(R.id.bt_video_1)
-    btVideo2 = view.findViewById(R.id.bt_video_2)
-    btImage1 = view.findViewById(R.id.bt_image_1)
-    btImage2 = view.findViewById(R.id.bt_image_2)
-    btArticle1 = view.findViewById(R.id.bt_article_1)
-    btArticle2 = view.findViewById(R.id.bt_article_2)
-  }
+              trackedButton(trackCategory = "Image 1", buttonLabel = "View Image 1", icon = Icons.Rounded.Image)
+              trackedButton(trackCategory = "Image 2", buttonLabel = "View Image 2", icon = Icons.Rounded.Image)
 
-  private fun setUpUI() {
-    btVideo1!!.setOnClickListener(this)
-    btVideo2!!.setOnClickListener(this)
-    btImage1!!.setOnClickListener(this)
-    btImage2!!.setOnClickListener(this)
-    btArticle1!!.setOnClickListener(this)
-    btArticle2!!.setOnClickListener(this)
-  }
-
-  override fun onClick(v: View) {
-    val id = v.id
-    val tag = v.tag as? String
-    if (tag == null || tag.isEmpty()) {
-      CLog.e("tag empty")
-      return
+              trackedButton(trackCategory = "Content 1", buttonLabel = "View Content 1", icon = Icons.Rounded.Newspaper)
+              trackedButton(trackCategory = "Content 2", buttonLabel = "View Content 2", icon = Icons.Rounded.Newspaper)
+            }
+          }
+        }
+      }
     }
-    when (id) {
-      R.id.bt_video_1, R.id.bt_video_2, R.id.bt_image_1, R.id.bt_image_2, R.id.bt_article_1, R.id.bt_article_2 -> trackEvent(tag)
+  }
+
+  @Composable
+  fun trackedButton(
+    trackCategory: String,
+    buttonLabel: String,
+    icon: ImageVector
+  ) {
+    ElevatedButton(
+      modifier = Modifier.fillMaxWidth(),
+      onClick = {
+        trackEvent(trackCategory)
+      }, elevation = ButtonDefaults.buttonElevation(
+      defaultElevation = 6.dp,
+      pressedElevation = 2.dp,
+      disabledElevation = 0.dp
+    )) {
+      Icon(
+        icon,
+        contentDescription = null
+      )
+      Spacer(modifier = Modifier.size(10.dp))
+      Text(buttonLabel)
     }
   }
 
@@ -65,14 +103,13 @@ class AnalyticsDemoFragment : Fragment(), View.OnClickListener {
       mToast = Toast.makeText(activity, toastMessage, Toast.LENGTH_SHORT)
       mToast?.show()
 
-
       //   CLog.displayToast(getActivity(), "Analytics data sent for " + action);
       val tags: MutableList<String> = ArrayList()
-      tags.add("tag1")
-      tags.add("tag2")
-      tags.add("tag3")
-      tags.add("tag4")
-      Lava.instance.track(Track("Interact", category, null, null, null, null, null))
+      tags.add("sample_tag_1")
+      tags.add("sample_tag_2")
+      tags.add("sample_tag_3")
+      tags.add("sample_tag_4")
+      Lava.instance.track(Track("Interact", category, null, null, tags, null, null))
     } catch (e: Throwable) {
       e.printStackTrace()
     }

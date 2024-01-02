@@ -5,12 +5,16 @@ import android.app.Activity
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.Button
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Icon
@@ -64,19 +68,27 @@ fun ConsentForm() {
         }
 
         options.forEach { option ->
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Checkbox(
-                    checked = selectedOptions.value.contains(option),
-                    onCheckedChange = { checked ->
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable {
                         val currentSelected = selectedOptions.value.toMutableSet()
-                        if (checked) {
+                        if (!currentSelected.contains(option)) {
                             currentSelected.add(option)
                         } else {
                             currentSelected.remove(option)
                         }
                         selectedOptions.value = currentSelected
                         applyChange()
-                    })
+                    }
+                    .padding(10.dp)
+            ) {
+                Checkbox(
+                    checked = selectedOptions.value.contains(option),
+                    onCheckedChange = null
+                )
+                Spacer(modifier = Modifier.size(10.dp))
                 Text(text = option.flag)
             }
         }

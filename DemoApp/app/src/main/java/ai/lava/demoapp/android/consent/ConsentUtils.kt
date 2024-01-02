@@ -30,14 +30,13 @@ object ConsentUtils {
     }
 
     fun applyConsentFlags(consentFlags: Set<ConsentFlag>) {
-        val target = mapToLavaConsentFlags(consentFlags)
-        Lava.instance.setPIConsentFlags(target)
+        val itemsToUpdate = mapToLavaConsentFlags(consentFlags)
+        Lava.instance.setPIConsentFlags(itemsToUpdate)
     }
 
     fun parseLavaPIConsentFlags(input: List<String>): Set<LavaPIConsentFlag> {
         return input.map {
             LavaPIConsentFlag.valueOf(it)
         }.toSet()
-
     }
 }
