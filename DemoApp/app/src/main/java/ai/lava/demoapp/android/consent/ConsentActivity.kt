@@ -15,20 +15,26 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.ripple.rememberRipple
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.lava.lavasdk.ConsentListener
+import com.lava.lavasdk.LavaPIConsentFlag
 
 class ConsentActivity : ComponentActivity() {
 
@@ -42,13 +48,38 @@ class ConsentActivity : ComponentActivity() {
 
 @Composable
 fun ConsentForm() {
+    var hasError by remember { mutableStateOf(false) }
+    var consentError: Throwable? by remember { mutableStateOf(null) }
     val options = ConsentFlag.values()
     val selectedOptions = remember { mutableStateOf(AppSession.instance.getConsentFlags()) }
     val checkedAll = selectedOptions.value.count() == options.size
     val activity = (LocalContext.current as? Activity)
-    val applyChange = {
-        AppSession.instance.setConsentFlags(selectedOptions.value)
-        ConsentUtils.applyConsentFlags(selectedOptions.value)
+    var consentListener: ConsentListener?
+
+    val applyChange = { options: Set<ConsentFlag> ->
+        val currentSelected = selectedOptions.value.toMutableSet()
+        if (currentSelected.containsAll(options)) {
+            currentSelected.removeAll(options)
+        } else {
+            currentSelected.addAll(options)
+        }
+
+        consentListener = object : ConsentListener {
+            override fun onResult(error: Throwable?) {
+                if (error != null) {
+                    hasError = true
+                    consentError = error
+                    return
+                }
+                selectedOptions.value = currentSelected
+                AppSession.instance.setConsentFlags(selectedOptions.value)
+            }
+        }
+
+        ConsentUtils.applyConsentFlags(
+            currentSelected,
+            consentListener
+        )
     }
 
     Column(
@@ -73,14 +104,7 @@ fun ConsentForm() {
                 modifier = Modifier
                     .fillMaxWidth()
                     .clickable {
-                        val currentSelected = selectedOptions.value.toMutableSet()
-                        if (!currentSelected.contains(option)) {
-                            currentSelected.add(option)
-                        } else {
-                            currentSelected.remove(option)
-                        }
-                        selectedOptions.value = currentSelected
-                        applyChange()
+                        applyChange(setOf(option))
                     }
                     .padding(10.dp)
             ) {
@@ -99,7 +123,7 @@ fun ConsentForm() {
             } else {
                 selectedOptions.value = options.toSet()
             }
-            applyChange()
+            applyChange(options.toSet())
         }, modifier = Modifier.fillMaxWidth()) {
             Text(
                 text = if (checkedAll) {
@@ -107,6 +131,19 @@ fun ConsentForm() {
                 } else {
                     "Check All"
                 }
+            )
+        }
+
+        if (hasError) {
+            AlertDialog(
+                onDismissRequest = { hasError = false },
+                title = { Text("Consent Error") },
+                text = { Text(consentError?.message ?: "Unknown consent error") },
+                confirmButton = {
+                    TextButton(onClick = { hasError = false }) {
+                        Text("Close".uppercase())
+                    }
+                },
             )
         }
     }

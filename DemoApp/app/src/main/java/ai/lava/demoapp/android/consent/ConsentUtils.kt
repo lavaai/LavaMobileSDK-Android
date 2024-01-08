@@ -1,6 +1,7 @@
 package ai.lava.demoapp.android.consent
 
 import ai.lava.demoapp.android.common.AppSession
+import com.lava.lavasdk.ConsentListener
 import com.lava.lavasdk.Lava
 import com.lava.lavasdk.LavaPIConsentFlag
 
@@ -29,9 +30,26 @@ object ConsentUtils {
         }.toSet()
     }
 
-    fun applyConsentFlags(consentFlags: Set<ConsentFlag>) {
+    fun fromLavaConsentFlags(consentFlags: Set<LavaPIConsentFlag>): Set<ConsentFlag> {
+        return consentFlags.map {
+            when (it) {
+                LavaPIConsentFlag.PerformanceAndLogging -> ConsentFlag.PerformanceAndLogging
+                LavaPIConsentFlag.Functional -> ConsentFlag.Functional
+                LavaPIConsentFlag.Targeting -> ConsentFlag.Targeting
+                LavaPIConsentFlag.StrictlyNecessary -> ConsentFlag.StrictlyNecessary
+            }
+        }.toSet()
+    }
+
+    fun applyConsentFlags(
+        consentFlags: Set<ConsentFlag>,
+        listener: ConsentListener?
+    ) {
         val itemsToUpdate = mapToLavaConsentFlags(consentFlags)
-        Lava.instance.setPIConsentFlags(itemsToUpdate)
+        Lava.instance.setPIConsentFlags(
+            itemsToUpdate,
+            listener
+        )
     }
 
     fun parseLavaPIConsentFlags(input: List<String>): Set<LavaPIConsentFlag> {
