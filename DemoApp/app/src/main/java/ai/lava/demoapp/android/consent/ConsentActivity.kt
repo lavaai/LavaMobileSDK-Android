@@ -51,7 +51,7 @@ fun ConsentForm() {
     var hasError by remember { mutableStateOf(false) }
     var consentError: Throwable? by remember { mutableStateOf(null) }
     val options = ConsentFlag.values()
-    val selectedOptions = remember { mutableStateOf(AppSession.instance.getConsentFlags()) }
+    val selectedOptions = remember { mutableStateOf(AppSession.instance.getConsentFlags() ?: emptySet()) }
     val checkedAll = selectedOptions.value.count() == options.size
     val activity = (LocalContext.current as? Activity)
     var consentListener: ConsentListener?
@@ -118,11 +118,6 @@ fun ConsentForm() {
         }
 
         Button(onClick = {
-            if (checkedAll) {
-                selectedOptions.value = emptySet()
-            } else {
-                selectedOptions.value = options.toSet()
-            }
             applyChange(options.toSet())
         }, modifier = Modifier.fillMaxWidth()) {
             Text(

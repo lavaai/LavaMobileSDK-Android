@@ -14,9 +14,20 @@ enum class ConsentFlag(val flag: String) {
 
 object ConsentUtils {
 
-    fun getStoredConsentFlags(): Set<LavaPIConsentFlag> {
-        val consentFlags = AppSession.instance.getConsentFlags()
+    fun getConsentFlags(predefined: Set<String>): Set<LavaPIConsentFlag> {
+        var consentFlags = AppSession.instance.getConsentFlags()
+        if (consentFlags == null) {
+            consentFlags = consentFlagsFromStrings(predefined)
+            AppSession.instance.setConsentFlags(consentFlags)
+        }
+
         return mapToLavaConsentFlags(consentFlags)
+    }
+
+    fun consentFlagsFromStrings(consentFlags: Set<String>): Set<ConsentFlag> {
+        return consentFlags.map {
+            ConsentFlag.valueOf(it)
+        }.toSet()
     }
 
     fun mapToLavaConsentFlags(consentFlags: Set<ConsentFlag>): Set<LavaPIConsentFlag> {

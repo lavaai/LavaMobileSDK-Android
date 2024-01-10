@@ -1,5 +1,11 @@
 {
   "clientId": "",
   "appKey": "",
-  "enableSecureMemberToken": false
+  "enableSecureMemberToken": false,
+  "consentFlags": [
+    "StrictlyNecessary",
+    "PerformanceAndLogging",
+    "Functional",
+    "Targeting"
+  ]
 }

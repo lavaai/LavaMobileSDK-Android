@@ -14,14 +14,17 @@ import android.graphics.Typeface
 import androidx.multidex.MultiDex
 import androidx.multidex.MultiDexApplication
 import com.google.firebase.messaging.FirebaseMessaging
+import com.lava.lavasdk.ConsentListener
 import com.lava.lavasdk.Lava
 import com.lava.lavasdk.LavaLogLevel
+import com.lava.lavasdk.LavaPIConsentFlag
 import com.lava.lavasdk.SecureMemberTokenExpiryListener
 import com.lava.lavasdk.internal.Style
 
 class LavaApplication : MultiDexApplication(), SecureMemberTokenExpiryListener {
 
     fun initLavaSdk(enableSecureMemberToken: Boolean) {
+
         Lava.init(
             this,
             BuildConfig.appKey,
@@ -29,7 +32,15 @@ class LavaApplication : MultiDexApplication(), SecureMemberTokenExpiryListener {
             R.drawable.app_icon_shil.toString(),
             LavaLogLevel.VERBOSE,
             LavaLogLevel.VERBOSE,
-            ConsentUtils.getStoredConsentFlags()
+            ConsentUtils.getConsentFlags(BuildConfig.consentFlags.toSet()),
+            object: ConsentListener {
+                override fun onResult(error: Throwable?) {
+                    if (error != null) {
+                        // Handle consent error
+                        return
+                    }
+                }
+            }
         )
 
         val customStyle = Style()

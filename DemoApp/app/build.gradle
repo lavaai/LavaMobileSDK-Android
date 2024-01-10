@@ -36,6 +36,7 @@ android {
             buildConfigField("String", "clientId", "\"${lavaServicesJson.clientId}\"")
             buildConfigField("String", "appKey", "\"${lavaServicesJson.appKey}\"")
             buildConfigField("String", "enableSecureMemberToken", "\"${lavaServicesJson.enableSecureMemberToken}\"")
+            buildConfigField("String[]", "consentFlags", "{${lavaServicesJson.consentFlags.collect { "\"${it}\"" }.join(", ")}}")
         }
 
         configurations.all {

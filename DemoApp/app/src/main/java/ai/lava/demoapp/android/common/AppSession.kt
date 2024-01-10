@@ -27,11 +27,11 @@ internal class AppSession(context: Context) {
         editor.apply()
     }
 
-    fun getConsentFlags(): Set<ConsentFlag> {
-        val raw = sp.getStringSet(KeyConsentFlags, ConsentFlag.values().map { it.flag }.toSet())
-        return raw!!.mapNotNull { flagString ->
+    fun getConsentFlags(): Set<ConsentFlag>? {
+        val raw = sp.getStringSet(KeyConsentFlags, null)
+        return raw?.mapNotNull { flagString ->
             ConsentFlag.values().firstOrNull { it.flag == flagString }
-        }.toSet()
+        }?.toSet()
     }
 
     companion object {
