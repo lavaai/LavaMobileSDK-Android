@@ -18,8 +18,13 @@ object ConsentUtils {
         var consentFlags = AppSession.instance.getConsentFlags()
         if (consentFlags == null) {
             consentFlags = consentFlagsFromStrings(predefined)
-            AppSession.instance.setConsentFlags(consentFlags)
         }
+
+        if (consentFlags.isEmpty()) {
+            consentFlags = ConsentFlag.values().toSet()
+        }
+
+        AppSession.instance.setConsentFlags(consentFlags)
 
         return mapToLavaConsentFlags(consentFlags)
     }
