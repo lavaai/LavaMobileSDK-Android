@@ -2,6 +2,7 @@ package ai.lava.demoapp.android.consent
 
 import ai.lava.demoapp.android.common.AppSession
 import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -55,6 +56,7 @@ fun ConsentForm() {
     val checkedAll = selectedOptions.value.count() == options.size
     val activity = (LocalContext.current as? Activity)
     var consentListener: ConsentListener?
+    var requireLogout by remember { mutableStateOf(false) }
 
     val applyChange = { options: Set<ConsentFlag> ->
         val currentSelected = selectedOptions.value.toMutableSet()
@@ -65,7 +67,7 @@ fun ConsentForm() {
         }
 
         consentListener = object : ConsentListener {
-            override fun onResult(error: Throwable?) {
+            override fun onResult(error: Throwable?, shouldLogout: Boolean) {
                 if (error != null) {
                     hasError = true
                     consentError = error
@@ -73,6 +75,9 @@ fun ConsentForm() {
                 }
                 selectedOptions.value = currentSelected
                 AppSession.instance.setConsentFlags(selectedOptions.value)
+                if (shouldLogout) {
+                    requireLogout = shouldLogout
+                }
             }
         }
 
@@ -90,7 +95,11 @@ fun ConsentForm() {
 
         Row(verticalAlignment = Alignment.CenterVertically) {
             IconButton(onClick = {
+                val data = Intent()
+                data.putExtra("SHOULD_LOGOUT", requireLogout)
+                activity?.setResult(Activity.RESULT_OK, data)
                 activity?.finish()
+
             }) {
                 Icon(Icons.Filled.ArrowBack, contentDescription = null)
             }

@@ -34,7 +34,7 @@ class LavaApplication : MultiDexApplication(), SecureMemberTokenExpiryListener {
             LavaLogLevel.VERBOSE,
             ConsentUtils.getConsentFlags(BuildConfig.consentFlags.toSet()),
             object: ConsentListener {
-                override fun onResult(error: Throwable?) {
+                override fun onResult(error: Throwable?, shouldLogout: Boolean) {
                     if (error != null) {
                         // Handle consent error
                         return

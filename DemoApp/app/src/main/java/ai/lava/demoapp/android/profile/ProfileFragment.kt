@@ -1,8 +1,10 @@
 package ai.lava.demoapp.android.profile
 
+import ai.lava.demoapp.android.MainActivity
 import ai.lava.demoapp.android.R
 import ai.lava.demoapp.android.consent.ConsentActivity
 import ai.lava.demoapp.android.utils.CLog
+import android.app.Activity
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
@@ -10,6 +12,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.ActivityResultCallback
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import com.lava.lavasdk.*
 import com.lava.lavasdk.internal.inbox.InboxStyle
@@ -20,6 +25,19 @@ class ProfileFragment : Fragment(), View.OnClickListener {
   private var tvPhoneNumber: TextView? = null
   private var tvEmailId: TextView? = null
 
+  private var consentLauncher = registerForActivityResult(
+    ActivityResultContracts.StartActivityForResult()
+  ) { result ->
+    if (result.resultCode == Activity.RESULT_OK) {
+      result.data?.apply {
+        if (getBooleanExtra("SHOULD_LOGOUT", false)) {
+          (activity as? MainActivity)?.forceLogout()
+        }
+      }
+    }
+  }
+
+
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     Lava.instance.track(
@@ -29,6 +47,7 @@ class ProfileFragment : Fragment(), View.OnClickListener {
         null, null, null, null, null
       )
     )
+
   }
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -122,7 +141,7 @@ class ProfileFragment : Fragment(), View.OnClickListener {
 
       R.id.tvConsentDialog -> {
         val intent = Intent(context, ConsentActivity::class.java)
-        startActivity(intent)
+        consentLauncher.launch(intent)
       }
     }
 

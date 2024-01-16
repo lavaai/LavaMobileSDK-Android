@@ -14,7 +14,7 @@ object ProgressUtils {
    */
   @JvmStatic
   fun showProgress(a: Activity?) {
-    showProgress(a, "loading", true)
+    showProgress(a, null, true)
   }
 
   /**
@@ -25,7 +25,7 @@ object ProgressUtils {
    */
   @JvmStatic
   fun showProgress(a: Activity?, isCancellable: Boolean) {
-    showProgress(a, "loading", isCancellable)
+    showProgress(a, null, isCancellable)
   }
 
   /**

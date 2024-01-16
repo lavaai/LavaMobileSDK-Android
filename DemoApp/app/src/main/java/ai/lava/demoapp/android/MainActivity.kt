@@ -244,6 +244,10 @@ class MainActivity : BaseActivity(), View.OnClickListener {
         }
     }
 
+    fun forceLogout() {
+        launchLoginActivity()
+    }
+
     private fun doLogout() {
         ProgressUtils.showProgress(this);
         localLogout()
