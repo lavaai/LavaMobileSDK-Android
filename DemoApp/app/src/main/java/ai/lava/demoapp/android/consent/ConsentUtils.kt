@@ -20,7 +20,7 @@ object ConsentUtils {
             consentFlags = consentFlagsFromStrings(predefined)
         }
 
-        if (consentFlags.isEmpty()) {
+        if (consentFlags == null) {
             consentFlags = ConsentFlag.values().toSet()
         }
 
@@ -29,10 +29,10 @@ object ConsentUtils {
         return mapToLavaConsentFlags(consentFlags)
     }
 
-    fun consentFlagsFromStrings(consentFlags: Set<String>): Set<ConsentFlag> {
-        return consentFlags.map {
+    fun consentFlagsFromStrings(consentFlags: Set<String>?): Set<ConsentFlag>? {
+        return consentFlags?.map {
             ConsentFlag.valueOf(it)
-        }.toSet()
+        }?.toSet()
     }
 
     fun mapToLavaConsentFlags(consentFlags: Set<ConsentFlag>): Set<LavaPIConsentFlag> {

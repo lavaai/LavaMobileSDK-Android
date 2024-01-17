@@ -32,5 +32,7 @@
     <string name="enable_secure_member_token">Enable Secure Member Token</string>
     <string name="please_wait">Please wait ...</string>
     <string name="string_consent_preferences">Consent Preferences</string>
+    <string name="anonymous_status">Currently using as an Anonymous user</string>
+    <string name="failed_anonymous_login">Failed to login as Anonymous user</string>
 
 </resources>

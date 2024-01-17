@@ -43,18 +43,56 @@
                 android:id="@+id/rl_login_container"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp">
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp">
+
+                <LinearLayout
+                    android:id="@+id/llAnonymous"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
+                    >
+                    <ProgressBar
+                        android:id="@+id/pbAnonymousLogin"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        />
+
+                    <TextView
+                        android:id="@+id/tvAnonymous"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone"
+                        android:text="@string/anonymous_status"
+                        android:textAlignment="center"
+                        android:textStyle="bold"
+                        />
+
+                    <TextView
+                        android:id="@+id/tvFailedAnonymous"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone"
+                        android:text="@string/failed_anonymous_login"
+                        android:textAlignment="center"
+                        android:textStyle="bold"
+                        android:textColor="@color/red"
+                        />
+
+                </LinearLayout>
 
                 <Button
                     android:id="@+id/btnInboxMessage"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
                     android:background="@drawable/selector_neutral_button"
                     android:text="@string/inbox_messages"
                     android:textAllCaps="false"
                     android:textColor="@color/white"
+                    android:layout_below="@id/llAnonymous"
                     />
 
                 <Button

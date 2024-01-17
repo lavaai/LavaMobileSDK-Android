@@ -29,6 +29,9 @@ class SignInFragment : Fragment(), View.OnClickListener {
   private var etPassword: EditText? = null
   private var btShowDebugInfo: Button? = null
   private var rlViewContainer: RelativeLayout? = null
+  private var pbAnonymousLogin: ProgressBar? = null
+  private var tvAnonymous: TextView? = null
+  private var tvFailedAnonymous: TextView? = null
   private var remaining = 0
 
   var commonLoginListener: ResultListener = object : ResultListener {
@@ -59,12 +62,20 @@ class SignInFragment : Fragment(), View.OnClickListener {
     setUpUI()
   }
 
+  override fun onStart() {
+    super.onStart()
+    loginAnonymous()
+  }
+
   private fun initUI(view: View) {
     btShowDebugInfo = view.findViewById(R.id.btnShowDebug)
     btInboxMessage = view.findViewById(R.id.btnInboxMessage)
     etUserName = view.findViewById(R.id.et_email)
     etPassword = view.findViewById(R.id.et_password)
     rlViewContainer = view.findViewById(R.id.rl_login_container)
+    pbAnonymousLogin = view.findViewById(R.id.pbAnonymousLogin)
+    tvAnonymous = view.findViewById(R.id.tvAnonymous)
+    tvFailedAnonymous = view.findViewById(R.id.tvFailedAnonymous)
   }
 
   private fun setUpUI() {
@@ -106,6 +117,22 @@ class SignInFragment : Fragment(), View.OnClickListener {
     } else {
       loginWithLavaSdk()
     }
+  }
+
+  private fun loginAnonymous() {
+    Lava.instance.setEmail(null, object: ResultListener {
+      override fun onResult(success: Boolean, message: String) {
+        if (success) {
+          tvAnonymous?.visibility = View.VISIBLE
+          tvFailedAnonymous?.visibility = View.GONE
+          pbAnonymousLogin?.visibility = View.GONE
+        } else {
+          tvAnonymous?.visibility = View.GONE
+          tvFailedAnonymous?.visibility = View.VISIBLE
+          pbAnonymousLogin?.visibility = View.GONE
+        }
+      }
+    })
   }
 
   fun loginWithAppBackend() {
