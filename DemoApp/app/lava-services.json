@@ -1,11 +1,1 @@
-{
-  "clientId": "",
-  "appKey": "",
-  "enableSecureMemberToken": false,
-  "consentFlags": [
-    "StrictlyNecessary",
-    "PerformanceAndLogging",
-    "Functional",
-    "Targeting"
-  ]
-}
+{ "clientId": "gcp2dev1-backend.test", "appKey": "test-access-key", "enableSecureMemberToken": false }
