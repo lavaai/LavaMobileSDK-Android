@@ -45,6 +45,13 @@
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateHidden|adjustPan" />
 
+        <activity
+            android:name=".consent.ConsentActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="@string/title_activity_consent"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
+
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="fe6363c5a03dcd9dfdbcc8b96fff7b957add89d1" />

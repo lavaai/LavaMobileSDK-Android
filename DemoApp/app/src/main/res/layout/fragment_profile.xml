@@ -154,6 +154,21 @@
             android:layout_marginRight="10dp"
             />
 
+        <TextView
+            android:id="@+id/tvConsentDialog"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:background="@drawable/selector_general_button"
+            android:padding="16dp"
+            android:text="Consent Preferences"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:layout_marginTop="15dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            />
+
     </LinearLayout>
 
 </ScrollView>

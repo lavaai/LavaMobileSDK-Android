@@ -5,6 +5,7 @@ import ai.lava.demoapp.android.api.AuthResponse
 import ai.lava.demoapp.android.api.RefreshTokenRequest
 import ai.lava.demoapp.android.api.RestClient
 import ai.lava.demoapp.android.common.AppSession
+import ai.lava.demoapp.android.consent.ConsentUtils
 import ai.lava.demoapp.android.deepLink.DeepLinkReceiver
 import ai.lava.demoapp.android.utils.CLog
 import android.content.Context
@@ -13,21 +14,33 @@ import android.graphics.Typeface
 import androidx.multidex.MultiDex
 import androidx.multidex.MultiDexApplication
 import com.google.firebase.messaging.FirebaseMessaging
+import com.lava.lavasdk.ConsentListener
 import com.lava.lavasdk.Lava
 import com.lava.lavasdk.LavaLogLevel
+import com.lava.lavasdk.LavaPIConsentFlag
 import com.lava.lavasdk.SecureMemberTokenExpiryListener
 import com.lava.lavasdk.internal.Style
 
 class LavaApplication : MultiDexApplication(), SecureMemberTokenExpiryListener {
 
     fun initLavaSdk(enableSecureMemberToken: Boolean) {
+
         Lava.init(
             this,
             BuildConfig.appKey,
             BuildConfig.clientId,
             R.drawable.app_icon_shil.toString(),
             LavaLogLevel.VERBOSE,
-            LavaLogLevel.VERBOSE
+            LavaLogLevel.VERBOSE,
+            ConsentUtils.getConsentFlags(BuildConfig.consentFlags.toSet()),
+            object: ConsentListener {
+                override fun onResult(error: Throwable?, shouldLogout: Boolean) {
+                    if (error != null) {
+                        // Handle consent error
+                        return
+                    }
+                }
+            }
         )
 
         val customStyle = Style()

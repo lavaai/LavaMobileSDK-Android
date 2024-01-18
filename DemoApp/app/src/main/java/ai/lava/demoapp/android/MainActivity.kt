@@ -9,7 +9,9 @@ import ai.lava.demoapp.android.inbox.NotificationInboxFragment
 import ai.lava.demoapp.android.profile.EditProfileFragment
 import ai.lava.demoapp.android.profile.EditProfileFragment.NotifierListener
 import ai.lava.demoapp.android.profile.ProfileFragment
+import ai.lava.demoapp.android.utils.CLog
 import ai.lava.demoapp.android.utils.GenericUtils
+import ai.lava.demoapp.android.utils.ProgressUtils
 import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
@@ -28,6 +30,7 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.lava.lavasdk.Lava
+import com.lava.lavasdk.ResultListener
 
 class MainActivity : BaseActivity(), View.OnClickListener {
     private var mDrawerLayout: DrawerLayout? = null
@@ -241,17 +244,28 @@ class MainActivity : BaseActivity(), View.OnClickListener {
         }
     }
 
+    fun forceLogout() {
+        launchLoginActivity()
+    }
+
     private fun doLogout() {
-        val user = Lava.instance.getUser()
-        if (user?.isNormalUser() == true) {
-            //ProgressUtils.showProgress(this);
-            localLogout()
-            launchLoginActivity()
-        }
+        ProgressUtils.showProgress(this);
+        localLogout()
     }
 
     private fun localLogout() {
-        Lava.instance.setEmail(null, null)
+        Lava.instance.setEmail(null, object : ResultListener {
+            override fun onResult(success: Boolean, message: String) {
+                ProgressUtils.cancel()
+                CLog.d("doLogout() called with: success = [$success], message = [$message]")
+
+                if (success) {
+                    launchLoginActivity()
+                } else {
+                    GenericUtils.displayToast(this@MainActivity, message)
+                }
+            }
+        })
     }
 
     fun addEditProfileFragment() {

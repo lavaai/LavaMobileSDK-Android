@@ -10,6 +10,7 @@
     <string name="sign_in">Sign In</string>
     <string name="or">OR</string>
     <string name="title_activity_main">MainActivity</string>
+    <string name="title_activity_consent">ConsentActivity</string>
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
     <string name="logout">Logout</string>
@@ -21,7 +22,7 @@
     <string name="save">SAVE</string>
     <string name="inboxmessage">Inbox Message</string>
     <string name="inbox_messages">Inbox Messages</string>
-    <string name="show_debug_info">Show debug info</string>
+    <string name="show_debug_info">Show Debug Info</string>
     <string name="refresh">Refresh</string>
     <string name="edit">Edit</string>
     <string name="state">State :</string>
@@ -30,5 +31,8 @@
     <string name="password">Password</string>
     <string name="enable_secure_member_token">Enable Secure Member Token</string>
     <string name="please_wait">Please wait ...</string>
+    <string name="string_consent_preferences">Consent Preferences</string>
+    <string name="anonymous_status">Currently using as an Anonymous user</string>
+    <string name="failed_anonymous_login">Failed to login as Anonymous user</string>
 
 </resources>

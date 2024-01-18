@@ -1,11 +1,10 @@
 // These settings are for local development
-
 if (debugLavaSdkBuild.toBoolean()) {
     include ':lavasdk'
     project(':lavasdk').projectDir = new File('../../SDK-Android/lavasdk')
 
     dependencyResolutionManagement {
-        repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+        repositoriesMode.set(RepositoriesMode.PREFER_SETTINGS)
         repositories {
             google()
             mavenCentral()
