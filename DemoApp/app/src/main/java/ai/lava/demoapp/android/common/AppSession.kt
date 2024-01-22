@@ -1,6 +1,5 @@
 package ai.lava.demoapp.android.common
 
-import ai.lava.demoapp.android.consent.ConsentFlag
 import android.content.Context
 import android.content.SharedPreferences
 
@@ -21,22 +20,24 @@ internal class AppSession(context: Context) {
         editor.apply()
     }
 
-    fun setConsentFlags(value: Set<ConsentFlag>) {
+    fun setConsentFlags(value: Set<String>) {
         val editor = sp.edit()
-        editor.putStringSet(KeyConsentFlags, value.map { it.flag }.toSet())
+        editor.putStringSet(KeyConsentFlags, value)
         editor.apply()
     }
 
-    fun getConsentFlags(): Set<ConsentFlag>? {
-        val raw = sp.getStringSet(KeyConsentFlags, null)
-        return raw?.mapNotNull { flagString ->
-            ConsentFlag.values().firstOrNull { it.flag == flagString }
-        }?.toSet()
+    fun getConsentFlags(): Set<String>? = sp.getStringSet(KeyConsentFlags, null)
+
+    fun setUseCustomConsent(value: Boolean) {
+        sp.edit().putBoolean(KeyUseCustomConsent, value).apply()
     }
+
+    fun getUseCustomConsent(): Boolean = sp.getBoolean(KeyUseCustomConsent, false)
 
     companion object {
         private const val KeyEmail = "EMAIL"
         private const val KeyConsentFlags = "CONSENT"
+        private const val KeyUseCustomConsent = "USE_CUSTOM_CONSENT"
         lateinit var instance: AppSession
 
         fun init(context: Context) {

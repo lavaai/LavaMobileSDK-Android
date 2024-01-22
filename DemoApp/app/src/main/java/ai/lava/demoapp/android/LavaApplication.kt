@@ -16,32 +16,58 @@ import androidx.multidex.MultiDexApplication
 import com.google.firebase.messaging.FirebaseMessaging
 import com.lava.lavasdk.ConsentListener
 import com.lava.lavasdk.Lava
+import com.lava.lavasdk.LavaConsent
 import com.lava.lavasdk.LavaLogLevel
-import com.lava.lavasdk.LavaPIConsentFlag
 import com.lava.lavasdk.SecureMemberTokenExpiryListener
 import com.lava.lavasdk.internal.Style
 
 class LavaApplication : MultiDexApplication(), SecureMemberTokenExpiryListener {
 
-    fun initLavaSdk(enableSecureMemberToken: Boolean) {
+    fun initLavaSdk(
+        enableSecureMemberToken: Boolean,
+        customConsent: Boolean = false,
+    ) {
 
-        Lava.init(
-            this,
-            BuildConfig.appKey,
-            BuildConfig.clientId,
-            R.drawable.app_icon_shil.toString(),
-            LavaLogLevel.VERBOSE,
-            LavaLogLevel.VERBOSE,
-            ConsentUtils.getConsentFlags(BuildConfig.consentFlags.toSet()),
-            object: ConsentListener {
-                override fun onResult(error: Throwable?, shouldLogout: Boolean) {
-                    if (error != null) {
-                        // Handle consent error
-                        return
+        if (!customConsent) {
+            Lava.init(
+                this,
+                BuildConfig.appKey,
+                BuildConfig.clientId,
+                R.drawable.app_icon_shil.toString(),
+                LavaLogLevel.VERBOSE,
+                LavaLogLevel.VERBOSE,
+                ConsentUtils.getConsentFlags(BuildConfig.consentFlags.toSet()),
+                object: ConsentListener {
+                    override fun onResult(error: Throwable?, shouldLogout: Boolean) {
+                        if (error != null) {
+                            // Handle consent error
+                            return
+                        }
                     }
                 }
-            }
-        )
+            )
+        } else {
+            Lava.init(
+                this,
+                BuildConfig.appKey,
+                BuildConfig.clientId,
+                R.drawable.app_icon_shil.toString(),
+                LavaLogLevel.VERBOSE,
+                LavaLogLevel.VERBOSE,
+                LavaConsent.OneTrustDefaultConsentMapping,
+                ConsentUtils.getCustomConsentFlags(
+                    BuildConfig.customConsentFlags.toSet()
+                ),
+                object : ConsentListener {
+                    override fun onResult(error: Throwable?, shouldLogout: Boolean) {
+                        if (error != null) {
+                            // Handle consent error
+                            return
+                        }
+                    }
+                }
+            )
+        }
 
         val customStyle = Style()
             .setTitleFont(Typeface.createFromAsset(applicationContext.assets, "fonts/poppins_bold.ttf"))
@@ -69,7 +95,10 @@ class LavaApplication : MultiDexApplication(), SecureMemberTokenExpiryListener {
         CLog.logLevel = CLog.LogLevel.VERBOSE
 
         AppSession.init(this)
-        initLavaSdk(BuildConfig.enableSecureMemberToken.toBoolean())
+        initLavaSdk(
+            BuildConfig.enableSecureMemberToken.toBoolean(),
+            AppSession.instance.getUseCustomConsent()
+        )
         registerForNotification()
     }
 

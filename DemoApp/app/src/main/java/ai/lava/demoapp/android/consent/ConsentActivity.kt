@@ -1,5 +1,7 @@
 package ai.lava.demoapp.android.consent
 
+import ai.lava.demoapp.android.BuildConfig
+import ai.lava.demoapp.android.LavaApplication
 import ai.lava.demoapp.android.common.AppSession
 import android.app.Activity
 import android.content.Intent
@@ -32,8 +34,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.lava.lavasdk.ConsentListener
 import com.lava.lavasdk.LavaPIConsentFlag
 
@@ -51,14 +55,15 @@ class ConsentActivity : ComponentActivity() {
 fun ConsentForm() {
     var hasError by remember { mutableStateOf(false) }
     var consentError: Throwable? by remember { mutableStateOf(null) }
-    val options = ConsentFlag.values()
+    var options by remember { mutableStateOf(AppConsent.currentConsentMapping().keys) }
     val selectedOptions = remember { mutableStateOf(AppSession.instance.getConsentFlags() ?: emptySet()) }
     val checkedAll = selectedOptions.value.count() == options.size
     val activity = (LocalContext.current as? Activity)
     var consentListener: ConsentListener?
     var requireLogout by remember { mutableStateOf(false) }
+    var useCustomConsent by remember { mutableStateOf(AppSession.instance.getUseCustomConsent()) }
 
-    val applyChange = { options: Set<ConsentFlag> ->
+    val applyChange = { options: Set<String> ->
         val currentSelected = selectedOptions.value.toMutableSet()
         if (currentSelected.containsAll(options)) {
             currentSelected.removeAll(options)
@@ -85,6 +90,30 @@ fun ConsentForm() {
             currentSelected,
             consentListener
         )
+    }
+
+    fun toggleCustomConsent() {
+        val currentLavaConsents = ConsentUtils.mapToLavaConsentFlags(
+            AppSession.instance.getConsentFlags() ?: emptySet(),
+            AppConsent.currentConsentMapping()
+        )
+
+        val shouldUseCustomConsent = !AppSession.instance.getUseCustomConsent()
+
+        AppSession.instance.setUseCustomConsent(shouldUseCustomConsent)
+
+        LavaApplication.instance.initLavaSdk(
+            BuildConfig.enableSecureMemberToken.toBoolean(),
+            shouldUseCustomConsent
+        )
+
+        useCustomConsent = shouldUseCustomConsent
+
+        options = AppConsent.currentConsentMapping().keys
+
+        val newConsents = ConsentUtils.fromLavaConsentFlags(currentLavaConsents, AppConsent.currentConsentMapping())
+        selectedOptions.value = newConsents
+        AppSession.instance.setConsentFlags(newConsents)
     }
 
     Column(
@@ -122,7 +151,12 @@ fun ConsentForm() {
                     onCheckedChange = null
                 )
                 Spacer(modifier = Modifier.size(10.dp))
-                Text(text = option.flag)
+                Column {
+                    Text(text = option, fontSize = 18.sp, fontWeight = FontWeight.Bold)
+                    
+                    Text(text = AppConsent.currentConsentMapping()[option]?.map { it.name }?.joinToString() ?: "N/A")
+                }
+                
             }
         }
 
@@ -134,6 +168,18 @@ fun ConsentForm() {
                     "Uncheck All"
                 } else {
                     "Check All"
+                }
+            )
+        }
+
+        Button(onClick = {
+            toggleCustomConsent()
+        }, modifier = Modifier.fillMaxWidth()) {
+            Text(
+                text = if (useCustomConsent) {
+                    "Use LAVA default consents"
+                } else {
+                    "Use Customized consents"
                 }
             )
         }
