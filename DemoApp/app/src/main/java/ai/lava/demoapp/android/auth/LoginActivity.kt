@@ -67,7 +67,7 @@ class LoginActivity : BaseActivity() {
   override fun onDestroy() {
     super.onDestroy()
     isAlive = false
-    CLog.e("Login Activity destroyed")
+    CLog.d("Login Activity destroyed")
     GenericUtils.hideKeyboard(this)
   }
 

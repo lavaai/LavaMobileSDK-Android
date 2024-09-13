@@ -4,12 +4,9 @@ import ai.lava.demoapp.android.auth.LoginActivity
 import ai.lava.demoapp.android.utils.CLog
 import android.app.Activity
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.view.WindowInsets
-import android.view.WindowManager
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import com.lava.lavasdk.Lava
@@ -25,10 +22,6 @@ class SplashScreenActivity : Activity() {
       hide(WindowInsetsCompat.Type.statusBars() or WindowInsetsCompat.Type.navigationBars())
     }
 
-    initUI()
-  }
-
-  private fun initUI() {
     launchSuitableActivity()
   }
 
@@ -42,18 +35,46 @@ class SplashScreenActivity : Activity() {
     finish()
     startActivity(intent)
 
-    Handler(Looper.getMainLooper()).postDelayed({ launchDeepLinkIfNeeded() }, 500)
+    Handler(Looper.getMainLooper()).postDelayed({
+      launchLavaPushNotificationIfNeeded()
+    }, 500)
   }
 
-  private fun launchDeepLinkIfNeeded() {
+  private fun launchLavaPushNotificationIfNeeded() {
     try {
+      val intentExtras = getIntent()?.getExtras()
+
+      if (intentExtras != null) {
+        val intentExtrasMap = mutableMapOf<String, String>()
+
+        intentExtras?.keySet()?.forEach { key ->
+          val value = intentExtras.get(key)
+          intentExtrasMap[key] = value?.toString() ?: "null"
+        }
+
+        val canHandle = Lava.instance.canHandlePushNotification(intentExtrasMap)
+
+        if (canHandle) {
+          val handleNotificationResult = Lava.instance.handleNotification(applicationContext,
+            MainActivity::class.java,
+            intentExtrasMap,
+            null, intentExtras)
+          if (!handleNotificationResult) {
+            CLog.e("Lava handleNotification failed")
+          }
+
+          return
+        }
+      }
+
       val data = this.intent.data
       if (data != null && data.isHierarchical) {
         val uri = this.intent.dataString
         CLog.i("Deep link clicked $uri")
-        Lava.instance.handlePassLink(this, uri!!)
+        Lava.instance.handleDeepLink(this, uri!!)
       }
     } catch (e: Exception) {
+      CLog.e("Failed in launchLavaPushNotificationIfNeeded")
       e.printStackTrace()
     }
   }
