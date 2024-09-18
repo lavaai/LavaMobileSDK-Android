@@ -5,6 +5,7 @@ import ai.lava.demoapp.android.api.AuthResponse
 import ai.lava.demoapp.android.api.RefreshTokenRequest
 import ai.lava.demoapp.android.api.RestClient
 import ai.lava.demoapp.android.common.AppSession
+import ai.lava.demoapp.android.consent.AppConsent
 import ai.lava.demoapp.android.consent.ConsentUtils
 import ai.lava.demoapp.android.deepLink.DeepLinkReceiver
 import ai.lava.demoapp.android.utils.CLog
@@ -27,7 +28,6 @@ class LavaApplication : MultiDexApplication(), SecureMemberTokenExpiryListener {
         enableSecureMemberToken: Boolean,
         customConsent: Boolean = false,
     ) {
-
         if (!customConsent) {
             Lava.init(
                 this,
@@ -36,7 +36,7 @@ class LavaApplication : MultiDexApplication(), SecureMemberTokenExpiryListener {
                 R.drawable.app_icon_shil.toString(),
                 LavaLogLevel.VERBOSE,
                 LavaLogLevel.VERBOSE,
-                ConsentUtils.getConsentFlags(BuildConfig.consentFlags.toSet()),
+                ConsentUtils.getConsentFlags(),
                 object: ConsentListener {
                     override fun onResult(error: Throwable?, shouldLogout: Boolean) {
                         if (error != null) {

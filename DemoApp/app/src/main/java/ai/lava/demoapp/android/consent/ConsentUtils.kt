@@ -6,6 +6,8 @@ import com.lava.lavasdk.Lava
 import com.lava.lavasdk.LavaPIConsentFlag
 
 object AppConsent {
+    val defaultInitConsent = setOf("StrictlyNecessary")
+
     val defaultMapping: Map<String, Set<LavaPIConsentFlag>> = mapOf(
         "Strictly Necessary" to setOf(LavaPIConsentFlag.StrictlyNecessary),
         "Performance And Logging" to setOf(LavaPIConsentFlag.PerformanceAndLogging),
@@ -32,15 +34,14 @@ object AppConsent {
 object ConsentUtils {
 
     // Load the consent flags and store them in the AppSession
-    fun getConsentFlags(
-        predefined: Set<String>?
-    ): Set<LavaPIConsentFlag> {
+    fun getConsentFlags(): Set<LavaPIConsentFlag> {
         var consentFlags = AppSession.instance.getConsentFlags()
+
         if (consentFlags == null) {
-            consentFlags = if (predefined.isNullOrEmpty()) {
+            consentFlags = if (AppConsent.defaultInitConsent.isNullOrEmpty()) {
                 AppConsent.defaultMapping.keys
             } else {
-                predefined
+                AppConsent.defaultInitConsent
             }
         }
 
