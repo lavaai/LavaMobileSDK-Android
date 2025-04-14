@@ -5,7 +5,6 @@ import ai.lava.demoapp.android.api.AuthResponse
 import ai.lava.demoapp.android.api.RefreshTokenRequest
 import ai.lava.demoapp.android.api.RestClient
 import ai.lava.demoapp.android.common.AppSession
-import ai.lava.demoapp.android.consent.AppConsent
 import ai.lava.demoapp.android.consent.ConsentUtils
 import ai.lava.demoapp.android.deepLink.DeepLinkReceiver
 import ai.lava.demoapp.android.utils.CLog
@@ -18,17 +17,30 @@ import com.google.firebase.messaging.FirebaseMessaging
 import com.lava.lavasdk.ConsentListener
 import com.lava.lavasdk.Lava
 import com.lava.lavasdk.LavaConsent
+import com.lava.lavasdk.LavaInitListener
 import com.lava.lavasdk.LavaLogLevel
 import com.lava.lavasdk.SecureMemberTokenExpiryListener
 import com.lava.lavasdk.internal.Style
 
-class LavaApplication : MultiDexApplication(), SecureMemberTokenExpiryListener {
+class LavaApplication : MultiDexApplication(), SecureMemberTokenExpiryListener, LavaInitListener {
 
     fun initLavaSdk(
         enableSecureMemberToken: Boolean,
         customConsent: Boolean = false,
+        handleInitialization: Boolean = false,
     ) {
-        if (!customConsent) {
+        if (handleInitialization) {
+            Lava.init(
+                this,
+                BuildConfig.appKey,
+                BuildConfig.clientId,
+                R.drawable.app_icon_shil.toString(),
+                LavaLogLevel.VERBOSE,
+                LavaLogLevel.VERBOSE,
+                hostAppUIReady = false,
+                initListener = this
+            )
+        } else if (!customConsent) {
             Lava.init(
                 this,
                 BuildConfig.appKey,
@@ -44,7 +56,7 @@ class LavaApplication : MultiDexApplication(), SecureMemberTokenExpiryListener {
                             return
                         }
                     }
-                }
+                },
             )
         } else {
             Lava.init(
@@ -97,7 +109,8 @@ class LavaApplication : MultiDexApplication(), SecureMemberTokenExpiryListener {
         AppSession.init(this)
         initLavaSdk(
             BuildConfig.enableSecureMemberToken.toBoolean(),
-            AppSession.instance.getUseCustomConsent()
+            AppSession.instance.getUseCustomConsent(),
+            BuildConfig.handleInitialization.toBoolean(),
         )
         registerForNotification()
     }
@@ -146,5 +159,9 @@ class LavaApplication : MultiDexApplication(), SecureMemberTokenExpiryListener {
 
     companion object {
         lateinit var instance: LavaApplication
+    }
+
+    override fun onCompleted() {
+        CLog.i("LAVA SDK: Initialization completed")
     }
 }

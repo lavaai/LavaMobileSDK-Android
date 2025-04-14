@@ -1,7 +1,6 @@
 package ai.lava.demoapp.android.auth
 
 import ai.lava.demoapp.android.BuildConfig
-import ai.lava.demoapp.android.LavaApplication
 import ai.lava.demoapp.android.R
 import ai.lava.demoapp.android.api.ApiResultListener
 import ai.lava.demoapp.android.api.AuthResponse
@@ -18,11 +17,17 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.Button
+import android.widget.EditText
+import android.widget.ProgressBar
+import android.widget.RelativeLayout
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.lava.lavasdk.Lava
 import com.lava.lavasdk.ResultListener
 import com.lava.lavasdk.Track
+import java.util.Timer
+import kotlin.concurrent.timerTask
 
 class SignInFragment : Fragment(), View.OnClickListener {
   private var etUserName: EditText? = null
@@ -46,6 +51,18 @@ class SignInFragment : Fragment(), View.OnClickListener {
       }
     }
   }
+
+  private var quickPassLoginListener: ResultListener = object : ResultListener {
+    override fun onResult(success: Boolean, message: String) {
+      ProgressUtils.cancel()
+
+      // Delay 5s and logout
+      Timer("Anon logout", false).schedule(timerTask{
+        Lava.instance.setEmail(null, null)
+      }, 5000)
+    }
+  }
+
   private var btInboxMessage: Button? = null
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -81,6 +98,7 @@ class SignInFragment : Fragment(), View.OnClickListener {
   private fun setUpUI() {
     view?.findViewById<TextView>(R.id.bt_login)?.setOnClickListener(this)
     view?.findViewById<TextView>(R.id.btnConsentPref)?.setOnClickListener(this)
+    view?.findViewById<TextView>(R.id.btnQuickPass)?.setOnClickListener(this)
     btShowDebugInfo!!.setOnClickListener(this)
     btInboxMessage!!.setOnClickListener(this)
     rlViewContainer!!.setOnClickListener(this)
@@ -93,6 +111,7 @@ class SignInFragment : Fragment(), View.OnClickListener {
       R.id.bt_login -> doLogin()
       R.id.btnShowDebug -> showDebugInfo()
       R.id.btnInboxMessage -> (activity as LoginActivity?)!!.addInboxMessageScreen()
+      R.id.btnQuickPass -> quickPass()
       R.id.rl_login_container -> {
         remaining--
         if (remaining <= 0) {
@@ -135,7 +154,7 @@ class SignInFragment : Fragment(), View.OnClickListener {
     })
   }
 
-  fun loginWithAppBackend() {
+  private fun loginWithAppBackend() {
     val username = etUserName?.text?.toString()
     if (!isValidEmail(username)) {
       etUserName!!.error = "Please enter valid email"
@@ -174,10 +193,18 @@ class SignInFragment : Fragment(), View.OnClickListener {
     })
   }
 
-  fun loginWithLavaSdk() {
+  private fun loginWithLavaSdk() {
     val username = etUserName?.text?.toString()
     ProgressUtils.showProgress(activity, false)
     Lava.instance.setEmail(username, commonLoginListener)
+  }
+
+  // Login and show pass without using callback
+  private fun quickPass() {
+    val username = etUserName?.text?.toString()
+    ProgressUtils.showProgress(activity, false)
+    Lava.instance.setEmail(username, quickPassLoginListener)
+    Lava.instance.showInAppPass(requireContext())
   }
 
   override fun onResume() {
@@ -187,7 +214,7 @@ class SignInFragment : Fragment(), View.OnClickListener {
 
   companion object {
     fun isValidEmail(target: String?): Boolean {
-      return target != null && target.isNotEmpty()
+      return !target.isNullOrEmpty()
     }
   }
 }

@@ -17,14 +17,15 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlinx-serialization'
 
 android {
-    compileSdk 33
+    namespace "ai.lava.demoapp.android"
+    compileSdk 34
 
     flavorDimensions = ["default"]
 
     defaultConfig {
-        applicationId "ai.lava.demoapp.android"
+
         minSdk 23
-        targetSdk 33
+        targetSdk 34
         versionCode 1
         versionName "0.9.0"
         multiDexEnabled true
@@ -36,6 +37,7 @@ android {
             buildConfigField("String", "clientId", "\"${lavaServicesJson.clientId}\"")
             buildConfigField("String", "appKey", "\"${lavaServicesJson.appKey}\"")
             buildConfigField("String", "enableSecureMemberToken", "\"${lavaServicesJson.enableSecureMemberToken}\"")
+            buildConfigField("String", "handleInitialization", "\"${lavaServicesJson.handleInitialization}\"")
             buildConfigField("String[]", "consentFlags", "{${lavaServicesJson.consentFlags.collect { "\"${it}\"" }.join(", ")}}")
             buildConfigField("String[]", "customConsentFlags", "{${lavaServicesJson.consentFlags.collect { "\"${it}\"" }.join(", ")}}")
         }
@@ -66,7 +68,7 @@ android {
             applicationId "ai.lava.demoapp.android"
             versionName "0.9.0"
             minSdkVersion 23
-            targetSdkVersion 31
+            targetSdkVersion 34
         }
     }
     packagingOptions {
@@ -143,8 +145,8 @@ dependencies {
         implementation 'com.squareup.okhttp3:logging-interceptor:4.9.0'
         implementation 'com.squareup.okio:okio:2.8.0'
         // Disable the below file for using the local SDK project instead
-        implementation fileTree(dir: "libs", include: ["*.aar"])
-//        implementation project(path: ':lavasdk')
+//        implementation fileTree(dir: "libs", include: ["*.aar"])
+        implementation project(path: ':lavasdk')
     } else {
         implementation useLavaSdkMavenPackageVersion
     }
