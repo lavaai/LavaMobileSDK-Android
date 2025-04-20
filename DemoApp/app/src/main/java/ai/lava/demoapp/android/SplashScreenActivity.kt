@@ -48,14 +48,28 @@ class SplashScreenActivity : AppCompatActivity() {
 
   private fun launchLavaPushNotificationIfNeeded() {
     try {
-      val intentExtras = getIntent()?.getExtras()
+      val intentExtras = this.intent.extras
 
       if (intentExtras != null) {
         val intentExtrasMap = mutableMapOf<String, String>()
 
-        intentExtras?.keySet()?.forEach { key ->
-          val value = intentExtras.get(key)
-          intentExtrasMap[key] = value?.toString() ?: "null"
+        intentExtras.keySet()?.forEach { key ->
+          val value = intentExtras.getString(key)
+          intentExtrasMap[key] = value ?: "null"
+        }
+
+        val canHandle = Lava.instance.canHandlePushNotification(intentExtrasMap)
+
+        if (canHandle) {
+          val handleNotificationResult = Lava.instance.handleNotification(applicationContext,
+            MainActivity::class.java,
+            intentExtrasMap,
+            null, intentExtras)
+          if (!handleNotificationResult) {
+            CLog.e("Lava handleNotification failed")
+          }
+
+          return
         }
       }
 
