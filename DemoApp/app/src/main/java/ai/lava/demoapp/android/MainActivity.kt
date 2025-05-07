@@ -15,7 +15,6 @@ import ai.lava.demoapp.android.utils.ProgressUtils
 import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.view.Menu
 import android.view.View
 import android.view.WindowManager
@@ -93,7 +92,7 @@ class MainActivity : BaseActivity(), View.OnClickListener {
     override fun onStart() {
         super.onStart()
         if (selectedTab == -1) {
-            selectedTab = getIntent().getIntExtra("prevClickedId", -1)
+            selectedTab = intent.getIntExtra("prevClickedId", -1)
         }
 
         if (selectedTab != -1) {
@@ -102,6 +101,13 @@ class MainActivity : BaseActivity(), View.OnClickListener {
         }
 
         selectTile(R.id.tv_profile)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (BuildConfig.handleInitialization.toBoolean()) {
+            Lava.instance.finishAppInitialization()
+        }
     }
 
     private fun setToolbarTile(id: Int) {

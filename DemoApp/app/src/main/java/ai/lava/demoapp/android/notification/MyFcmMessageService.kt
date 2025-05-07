@@ -7,6 +7,7 @@ import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.lava.lavasdk.Lava
 
+
 /**
  * Created by Mohammed Azar on 11/6/2017.
  */
@@ -17,9 +18,10 @@ class MyFcmMessageService : FirebaseMessagingService() {
     val data = remoteMessage.data
     if (data.isNotEmpty()) {
       if (Lava.instance.canHandlePushNotification(remoteMessage.data)) {
-        val b = Bundle()
-        b.putInt("prevClickedId", MainActivity.selectedTab)
-        if (!Lava.instance.handleNotification(applicationContext, MainActivity::class.java, data, null, b)) {
+        val bundle = Bundle()
+        bundle.putInt("prevClickedId", MainActivity.selectedTab)
+
+        if (!Lava.instance.handleNotification(applicationContext, MainActivity::class.java, data, null, bundle)) {
           CLog.e("Lava did not handle notification")
         }
         //Notification handled by the SDK, App can ignore the //notification
