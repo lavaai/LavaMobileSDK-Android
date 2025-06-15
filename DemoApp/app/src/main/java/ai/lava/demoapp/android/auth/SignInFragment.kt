@@ -1,7 +1,6 @@
 package ai.lava.demoapp.android.auth
 
 import ai.lava.demoapp.android.BuildConfig
-import ai.lava.demoapp.android.LavaApplication
 import ai.lava.demoapp.android.R
 import ai.lava.demoapp.android.api.ApiResultListener
 import ai.lava.demoapp.android.api.AuthResponse
@@ -18,7 +17,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.Button
+import android.widget.EditText
+import android.widget.ProgressBar
+import android.widget.RadioGroup
+import android.widget.RelativeLayout
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.lava.lavasdk.Lava
 import com.lava.lavasdk.ResultListener
@@ -32,6 +36,7 @@ class SignInFragment : Fragment(), View.OnClickListener {
   private var pbAnonymousLogin: ProgressBar? = null
   private var tvAnonymous: TextView? = null
   private var tvFailedAnonymous: TextView? = null
+  private var rgExternalSystem: RadioGroup? = null
   private var remaining = 0
 
   var commonLoginListener: ResultListener = object : ResultListener {
@@ -71,11 +76,11 @@ class SignInFragment : Fragment(), View.OnClickListener {
     btShowDebugInfo = view.findViewById(R.id.btnShowDebug)
     btInboxMessage = view.findViewById(R.id.btnInboxMessage)
     etUserName = view.findViewById(R.id.et_email)
-    etPassword = view.findViewById(R.id.et_password)
     rlViewContainer = view.findViewById(R.id.rl_login_container)
     pbAnonymousLogin = view.findViewById(R.id.pbAnonymousLogin)
     tvAnonymous = view.findViewById(R.id.tvAnonymous)
     tvFailedAnonymous = view.findViewById(R.id.tvFailedAnonymous)
+    rgExternalSystem = view.findViewById(R.id.rgExternalSystem)
   }
 
   private fun setUpUI() {
@@ -84,6 +89,17 @@ class SignInFragment : Fragment(), View.OnClickListener {
     btShowDebugInfo!!.setOnClickListener(this)
     btInboxMessage!!.setOnClickListener(this)
     rlViewContainer!!.setOnClickListener(this)
+    rgExternalSystem!!.setOnCheckedChangeListener { group, checkId ->
+      when (checkId) {
+        R.id.radioEmail -> {
+          etUserName?.setText("app.001@lava.ai")
+        }
+        R.id.radioExternalID -> {
+          etUserName?.setText("123123123")
+        }
+      }
+
+    }
   }
 
   override fun onClick(v: View) {
@@ -177,7 +193,10 @@ class SignInFragment : Fragment(), View.OnClickListener {
   fun loginWithLavaSdk() {
     val username = etUserName?.text?.toString()
     ProgressUtils.showProgress(activity, false)
-    Lava.instance.setEmail(username, commonLoginListener)
+    when (rgExternalSystem?.checkedRadioButtonId) {
+      R.id.radioEmail -> Lava.instance.setEmail(username, commonLoginListener)
+      R.id.radioExternalID -> Lava.instance.setUserId(username, "nba_id_encrypted", commonLoginListener)
+    }
   }
 
   override fun onResume() {
