@@ -52,35 +52,32 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:paddingTop="10dp"
-                    android:paddingBottom="10dp"
-                    >
+                    android:paddingBottom="10dp">
+
                     <ProgressBar
                         android:id="@+id/pbAnonymousLogin"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        />
+                        android:layout_gravity="center" />
 
                     <TextView
                         android:id="@+id/tvAnonymous"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:visibility="gone"
                         android:text="@string/anonymous_status"
                         android:textAlignment="center"
                         android:textStyle="bold"
-                        />
+                        android:visibility="gone" />
 
                     <TextView
                         android:id="@+id/tvFailedAnonymous"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:visibility="gone"
                         android:text="@string/failed_anonymous_login"
                         android:textAlignment="center"
-                        android:textStyle="bold"
                         android:textColor="@color/red"
-                        />
+                        android:textStyle="bold"
+                        android:visibility="gone" />
 
                 </LinearLayout>
 
@@ -88,12 +85,11 @@
                     android:id="@+id/btnInboxMessage"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_below="@id/llAnonymous"
                     android:background="@drawable/selector_neutral_button"
                     android:text="@string/inbox_messages"
                     android:textAllCaps="false"
-                    android:textColor="@color/white"
-                    android:layout_below="@id/llAnonymous"
-                    />
+                    android:textColor="@color/white" />
 
                 <Button
                     android:id="@+id/btnShowDebug"
@@ -104,8 +100,7 @@
                     android:background="@drawable/selector_neutral_button"
                     android:text="@string/show_debug_info"
                     android:textAllCaps="false"
-                    android:textColor="@color/white"
-                    />
+                    android:textColor="@color/white" />
 
                 <Button
                     android:id="@+id/btnConsentPref"
@@ -116,8 +111,7 @@
                     android:background="@drawable/selector_neutral_button"
                     android:text="@string/string_consent_preferences"
                     android:textAllCaps="false"
-                    android:textColor="@color/white"
-                    />
+                    android:textColor="@color/white" />
 
                 <TextView
                     android:id="@+id/tv_or"
@@ -131,11 +125,34 @@
                     android:textSize="@dimen/sign_in_screen_or_text_size"
                     android:textStyle="bold" />
 
+                <RadioGroup
+                    android:id="@+id/rgExternalSystem"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tv_or"
+                    android:orientation="horizontal"
+                    android:checkedButton="@id/radioEmail"
+                    >
+
+                    <RadioButton
+                        android:id="@+id/radioEmail"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Email" />
+
+                    <RadioButton
+                        android:id="@+id/radioExternalID"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="External ID" />
+
+                </RadioGroup>
+
                 <EditText
                     android:id="@+id/et_email"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/tv_or"
+                    android:layout_below="@+id/rgExternalSystem"
                     android:layout_marginTop="15dp"
                     android:background="@drawable/shape_edit_text_white"
                     android:hint="@string/email_address"
@@ -146,55 +163,22 @@
                     android:paddingEnd="16dp"
                     android:paddingBottom="7dp"
                     android:singleLine="true"
+                    android:text="app.001@lava.ai"
                     android:textAppearance="?android:textAppearanceSmall"
                     android:textColor="@color/black"
-                    android:textColorHint="#757575"
-                    android:text="app.001@lava.ai" />
-
-                <EditText
-                    android:id="@+id/et_password"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/et_email"
-                    android:layout_marginTop="15dp"
-                    android:background="@drawable/shape_edit_text_white"
-                    android:hint="@string/password"
-                    android:inputType="textPassword"
-                    android:minHeight="48dp"
-                    android:paddingStart="16dp"
-                    android:paddingTop="7dp"
-                    android:paddingEnd="16dp"
-                    android:paddingBottom="10dp"
-                    android:singleLine="true"
-                    android:textAppearance="?android:textAppearanceSmall"
-                    android:textColor="@color/black"
-                    android:textColorHint="#757575"
-                    android:text="123456" />
-
-<!--                <Button-->
-<!--                    android:id="@+id/bt_login"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_below="@id/et_password"-->
-<!--                    android:layout_marginTop="10dp"-->
-<!--                    android:background="@drawable/ripple_effect_with_pink_background"-->
-<!--                    android:text="@string/login"-->
-<!--                    android:textColor="@color/white"-->
-<!--                    android:textSize="@dimen/toolbar_title_text_size" />-->
-
+                    android:textColorHint="#757575" />
 
                 <TextView
                     android:id="@+id/bt_login"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/et_password"
+                    android:layout_below="@id/et_email"
                     android:layout_marginTop="10dp"
                     android:background="@drawable/selector_general_button"
                     android:padding="16dp"
                     android:text="@string/login"
                     android:textAlignment="center"
-                    android:textColor="@color/white"
-                    />
+                    android:textColor="@color/white" />
 
             </RelativeLayout>
 
