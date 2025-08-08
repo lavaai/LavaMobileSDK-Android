@@ -1,1 +1,1 @@
-{ "clientId": "gcp2dev-backend.test", "appKey": "test-access-key", "enableSecureMemberToken": false }
+{ "clientId": "gcp2dev.test", "appKey": "test-access-key", "enableSecureMemberToken": false }
