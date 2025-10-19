@@ -12,11 +12,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.activity.result.ActivityResult
-import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.view.WindowCompat
 import androidx.fragment.app.Fragment
-import com.lava.lavasdk.*
+import com.lava.lavasdk.InboxMessage
+import com.lava.lavasdk.InboxMessageListener
+import com.lava.lavasdk.Lava
+import com.lava.lavasdk.ProfileListener
+import com.lava.lavasdk.Track
+import com.lava.lavasdk.UserProfile
 import com.lava.lavasdk.internal.inbox.InboxStyle
 
 class ProfileFragment : Fragment(), View.OnClickListener {
@@ -40,6 +44,7 @@ class ProfileFragment : Fragment(), View.OnClickListener {
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
+    WindowCompat.setDecorFitsSystemWindows(requireActivity().window, false)
     Lava.instance.track(
       Track(
         Track.ACTION_VIEW_SCREEN,
@@ -47,7 +52,6 @@ class ProfileFragment : Fragment(), View.OnClickListener {
         null, null, null, null, null
       )
     )
-
   }
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {

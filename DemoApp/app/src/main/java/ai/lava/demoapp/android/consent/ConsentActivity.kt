@@ -1,6 +1,5 @@
 package ai.lava.demoapp.android.consent
 
-import ai.lava.demoapp.android.BuildConfig
 import ai.lava.demoapp.android.LavaApplication
 import ai.lava.demoapp.android.common.AppSession
 import android.app.Activity
@@ -17,7 +16,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Checkbox
@@ -39,7 +37,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.lava.lavasdk.ConsentListener
-import com.lava.lavasdk.LavaPIConsentFlag
 
 class ConsentActivity : ComponentActivity() {
 
@@ -102,10 +99,11 @@ fun ConsentForm() {
 
         AppSession.instance.setUseCustomConsent(shouldUseCustomConsent)
 
-        LavaApplication.instance.initLavaSdk(
-            BuildConfig.enableSecureMemberToken.toBoolean(),
-            shouldUseCustomConsent
-        )
+        if (shouldUseCustomConsent) {
+            LavaApplication.instance.initLavaSDKWithCustomConsent()
+        } else {
+            LavaApplication.instance.initLavaSDKWithDefaultConsent()
+        }
 
         useCustomConsent = shouldUseCustomConsent
 

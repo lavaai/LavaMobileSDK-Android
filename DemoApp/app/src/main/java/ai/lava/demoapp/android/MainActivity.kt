@@ -15,7 +15,6 @@ import ai.lava.demoapp.android.utils.ProgressUtils
 import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.view.Menu
 import android.view.View
 import android.view.WindowManager

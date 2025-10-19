@@ -7,8 +7,8 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.google.gms:google-services:4.4.0'
-        classpath 'com.google.firebase:firebase-crashlytics-gradle:2.8.0'
+        classpath 'com.google.gms:google-services:4.4.4'
+        classpath 'com.google.firebase:firebase-crashlytics-gradle:3.0.6'
     }
 }
 
@@ -17,14 +17,13 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlinx-serialization'
 
 android {
-    compileSdk 33
+    compileSdkVersion 35
 
     flavorDimensions = ["default"]
 
     defaultConfig {
         applicationId "ai.lava.demoapp.android"
         minSdk 23
-        targetSdk 33
         versionCode 1
         versionName "0.9.0"
         multiDexEnabled true
@@ -66,7 +65,7 @@ android {
             applicationId "ai.lava.demoapp.android"
             versionName "0.9.0"
             minSdkVersion 23
-            targetSdkVersion 31
+            targetSdkVersion 35
         }
     }
     packagingOptions {
@@ -115,7 +114,7 @@ dependencies {
     implementation 'androidx.activity:activity-compose:1.6.1'
     implementation "androidx.datastore:datastore-preferences:1.0.0"
 
-    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.5'
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.1.5'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.2'
 
     implementation 'com.google.code.gson:gson:2.8.9'
@@ -130,7 +129,7 @@ dependencies {
 
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.6.2'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
-    implementation "androidx.core:core-ktx:1.7.0"
+    implementation "androidx.core:core-ktx:1.16.0"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.0"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
