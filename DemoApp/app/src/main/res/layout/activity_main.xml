@@ -11,6 +11,11 @@
         android:scaleType="centerCrop"
         android:src="@drawable/bg" />
 
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fitsSystemWindows="true"
+        android:background="@color/colorPrimary">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
@@ -55,6 +60,7 @@
         </RelativeLayout>
 
     </androidx.appcompat.widget.Toolbar>
+    </com.google.android.material.appbar.AppBarLayout>
 
 
     <androidx.drawerlayout.widget.DrawerLayout
