@@ -15,13 +15,13 @@ import ai.lava.demoapp.android.utils.ProgressUtils
 import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.view.Menu
 import android.view.View
 import android.view.WindowManager
 import android.widget.RelativeLayout
 import android.widget.ScrollView
 import android.widget.TextView
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
@@ -49,8 +49,9 @@ class MainActivity : BaseActivity(), View.OnClickListener {
     private var tvInboxMessage: TextView? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
 
+        super.onCreate(savedInstanceState)
         isAlive = true
         setContentView(R.layout.activity_main)
         changeStatusBarColor()
@@ -93,7 +94,7 @@ class MainActivity : BaseActivity(), View.OnClickListener {
     override fun onStart() {
         super.onStart()
         if (selectedTab == -1) {
-            selectedTab = getIntent().getIntExtra("prevClickedId", -1)
+            selectedTab = intent.getIntExtra("prevClickedId", -1)
         }
 
         if (selectedTab != -1) {

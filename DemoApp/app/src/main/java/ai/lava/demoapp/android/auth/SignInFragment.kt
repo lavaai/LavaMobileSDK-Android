@@ -9,6 +9,7 @@ import ai.lava.demoapp.android.api.RestClient
 import ai.lava.demoapp.android.common.AppSession
 import ai.lava.demoapp.android.consent.ConsentActivity
 import ai.lava.demoapp.android.debug.DebugActivity
+import ai.lava.demoapp.android.initOptions.InitOptionsActivity
 import ai.lava.demoapp.android.utils.CLog
 import ai.lava.demoapp.android.utils.GenericUtils
 import ai.lava.demoapp.android.utils.ProgressUtils
@@ -32,6 +33,7 @@ class SignInFragment : Fragment(), View.OnClickListener {
   private var etUserName: EditText? = null
   private var etPassword: EditText? = null
   private var btShowDebugInfo: Button? = null
+
   private var rlViewContainer: RelativeLayout? = null
   private var pbAnonymousLogin: ProgressBar? = null
   private var tvAnonymous: TextView? = null
@@ -85,7 +87,9 @@ class SignInFragment : Fragment(), View.OnClickListener {
 
   private fun setUpUI() {
     view?.findViewById<TextView>(R.id.bt_login)?.setOnClickListener(this)
+    view?.findViewById<TextView>(R.id.btnShowPass)?.setOnClickListener(this)
     view?.findViewById<TextView>(R.id.btnConsentPref)?.setOnClickListener(this)
+    view?.findViewById<TextView>(R.id.btnInitOptions)?.setOnClickListener(this)
     btShowDebugInfo!!.setOnClickListener(this)
     btInboxMessage!!.setOnClickListener(this)
     rlViewContainer!!.setOnClickListener(this)
@@ -115,8 +119,14 @@ class SignInFragment : Fragment(), View.OnClickListener {
           remaining = 3
         }
       }
+      R.id.btnShowPass -> Lava.instance.showInAppPass(requireContext())
       R.id.btnConsentPref -> {
         val intent = Intent(context, ConsentActivity::class.java)
+        startActivity(intent)
+      }
+
+      R.id.btnInitOptions -> {
+        val intent = Intent(context, InitOptionsActivity::class.java)
         startActivity(intent)
       }
       else -> {}

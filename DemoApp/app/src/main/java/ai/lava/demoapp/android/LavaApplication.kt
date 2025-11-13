@@ -23,50 +23,13 @@ import com.lava.lavasdk.internal.Style
 
 class LavaApplication : MultiDexApplication(), SecureMemberTokenExpiryListener {
 
-    fun initLavaSdk(
-        enableSecureMemberToken: Boolean,
-        customConsent: Boolean = false,
-    ) {
-        if (!customConsent) {
-            Lava.init(
-                this,
-                BuildConfig.appKey,
-                BuildConfig.clientId,
-                R.drawable.app_icon_shil.toString(),
-                LavaLogLevel.VERBOSE,
-                LavaLogLevel.VERBOSE,
-                ConsentUtils.getConsentFlags(),
-                object: ConsentListener {
-                    override fun onResult(error: Throwable?, shouldLogout: Boolean) {
-                        if (error != null) {
-                            // Handle consent error
-                            return
-                        }
-                    }
-                }
-            )
-        } else {
-            Lava.init(
-                this,
-                BuildConfig.appKey,
-                BuildConfig.clientId,
-                R.drawable.app_icon_shil.toString(),
-                LavaLogLevel.VERBOSE,
-                LavaLogLevel.VERBOSE,
-                LavaConsent.OneTrustDefaultConsentMapping,
-                ConsentUtils.getCustomConsentFlags(
-                    BuildConfig.customConsentFlags.toSet()
-                ),
-                object : ConsentListener {
-                    override fun onResult(error: Throwable?, shouldLogout: Boolean) {
-                        if (error != null) {
-                            // Handle consent error
-                            return
-                        }
-                    }
-                }
-            )
-        }
+    fun initLavaSDKWithDefaultConfig() {
+        Lava.init(this,
+            BuildConfig.appKey,
+            BuildConfig.clientId,
+            smallIcon = R.drawable.app_icon_shil.toString(),
+            serverLogLevel = LavaLogLevel.VERBOSE
+        )
 
         val customStyle = Style()
             .setTitleFont(Typeface.createFromAsset(applicationContext.assets, "fonts/poppins_bold.ttf"))
@@ -77,13 +40,88 @@ class LavaApplication : MultiDexApplication(), SecureMemberTokenExpiryListener {
         Lava.instance.setCustomStyle(customStyle)
 
         Lava.instance.registerDeepLinkReceiver(DeepLinkReceiver::class.java)
+    }
 
-        if (enableSecureMemberToken) {
-            Lava.instance.subscribeSecureMemberTokenExpiry(this)
-        } else {
-            Lava.instance.setSecureMemberToken(null)
-            Lava.instance.unsubscribeSecureMemberTokenExpiry(this)
-        }
+    fun initLavaSDKWithDefaultConsent() {
+        Lava.init(
+            this,
+            BuildConfig.appKey,
+            BuildConfig.clientId,
+            R.drawable.app_icon_shil.toString(),
+            LavaLogLevel.VERBOSE,
+            LavaLogLevel.VERBOSE,
+            ConsentUtils.getConsentFlags(),
+            object: ConsentListener {
+                override fun onResult(error: Throwable?, shouldLogout: Boolean) {
+                    if (error != null) {
+                        // Handle consent error
+                        return
+                    }
+                }
+            }
+        )
+
+        val customStyle = Style()
+            .setTitleFont(Typeface.createFromAsset(applicationContext.assets, "fonts/poppins_bold.ttf"))
+            .setContentFont(Typeface.createFromAsset(applicationContext.assets, "fonts/poppins_regular.ttf"))
+            .setContentTextColor(Color.LTGRAY)
+            .setCloseImage(R.drawable.test_close)
+
+        Lava.instance.setCustomStyle(customStyle)
+
+        Lava.instance.registerDeepLinkReceiver(DeepLinkReceiver::class.java)
+    }
+
+    fun initLavaSDKWithCustomConsent() {
+        Lava.init(
+            this,
+            BuildConfig.appKey,
+            BuildConfig.clientId,
+            R.drawable.app_icon_shil.toString(),
+            LavaLogLevel.VERBOSE,
+            LavaLogLevel.VERBOSE,
+            LavaConsent.OneTrustDefaultConsentMapping,
+            ConsentUtils.getCustomConsentFlags(
+                BuildConfig.customConsentFlags.toSet()
+            ),
+            object : ConsentListener {
+                override fun onResult(error: Throwable?, shouldLogout: Boolean) {
+                    if (error != null) {
+                        // Handle consent error
+                        return
+                    }
+                }
+            }
+        )
+
+        val customStyle = Style()
+            .setTitleFont(Typeface.createFromAsset(applicationContext.assets, "fonts/poppins_bold.ttf"))
+            .setContentFont(Typeface.createFromAsset(applicationContext.assets, "fonts/poppins_regular.ttf"))
+            .setContentTextColor(Color.LTGRAY)
+            .setCloseImage(R.drawable.test_close)
+
+        Lava.instance.setCustomStyle(customStyle)
+
+        Lava.instance.registerDeepLinkReceiver(DeepLinkReceiver::class.java)
+    }
+
+    fun initLavaSDKWithInvalidConfig() {
+        Lava.init(this,
+            appKey = "invalid-app-key",
+            clientId = "invalid-client-id",
+            smallIcon = R.drawable.app_icon_shil.toString(),
+            serverLogLevel = LavaLogLevel.VERBOSE
+        )
+
+        val customStyle = Style()
+            .setTitleFont(Typeface.createFromAsset(applicationContext.assets, "fonts/poppins_bold.ttf"))
+            .setContentFont(Typeface.createFromAsset(applicationContext.assets, "fonts/poppins_regular.ttf"))
+            .setContentTextColor(Color.LTGRAY)
+            .setCloseImage(R.drawable.test_close)
+
+        Lava.instance.setCustomStyle(customStyle)
+
+        Lava.instance.registerDeepLinkReceiver(DeepLinkReceiver::class.java)
     }
 
     override fun onCreate() {
@@ -94,10 +132,7 @@ class LavaApplication : MultiDexApplication(), SecureMemberTokenExpiryListener {
         CLog.logLevel = CLog.LogLevel.VERBOSE
 
         AppSession.init(this)
-        initLavaSdk(
-            BuildConfig.enableSecureMemberToken.toBoolean(),
-            AppSession.instance.getUseCustomConsent()
-        )
+        initLavaSDKWithDefaultConfig()
         registerForNotification()
     }
 

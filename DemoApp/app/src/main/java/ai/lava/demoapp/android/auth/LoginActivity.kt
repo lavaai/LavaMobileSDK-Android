@@ -4,16 +4,19 @@ import ai.lava.demoapp.android.BaseActivity
 import ai.lava.demoapp.android.MainActivity
 import ai.lava.demoapp.android.R
 import ai.lava.demoapp.android.inbox.NotificationInboxFragment
-import ai.lava.demoapp.android.utils.GenericUtils
 import ai.lava.demoapp.android.utils.CLog
+import ai.lava.demoapp.android.utils.GenericUtils
 import android.content.Intent
 import android.os.Bundle
 import android.view.WindowManager
+import androidx.activity.enableEdgeToEdge
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 
 class LoginActivity : BaseActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
+    enableEdgeToEdge(
+    )
     super.onCreate(savedInstanceState)
     isAlive = true
     setContentView(R.layout.layout_login_activity)

@@ -103,13 +103,35 @@
                     android:textColor="@color/white" />
 
                 <Button
-                    android:id="@+id/btnConsentPref"
+                    android:id="@+id/btnShowPass"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/btnShowDebug"
                     android:layout_marginTop="5dp"
                     android:background="@drawable/selector_neutral_button"
+                    android:text="@string/show_pass"
+                    android:textAllCaps="false"
+                    android:textColor="@color/white" />
+
+                <Button
+                    android:id="@+id/btnConsentPref"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/btnShowPass"
+                    android:layout_marginTop="5dp"
+                    android:background="@drawable/selector_neutral_button"
                     android:text="@string/string_consent_preferences"
+                    android:textAllCaps="false"
+                    android:textColor="@color/white" />
+
+                <Button
+                    android:id="@+id/btnInitOptions"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/btnConsentPref"
+                    android:layout_marginTop="5dp"
+                    android:background="@drawable/selector_neutral_button"
+                    android:text="@string/initialize_options"
                     android:textAllCaps="false"
                     android:textColor="@color/white" />
 
@@ -117,7 +139,7 @@
                     android:id="@+id/tv_or"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/btnConsentPref"
+                    android:layout_below="@id/btnInitOptions"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="15dp"
                     android:gravity="center"

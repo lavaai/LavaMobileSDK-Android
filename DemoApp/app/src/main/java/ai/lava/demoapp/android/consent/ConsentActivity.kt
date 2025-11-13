@@ -1,6 +1,5 @@
 package ai.lava.demoapp.android.consent
 
-import ai.lava.demoapp.android.BuildConfig
 import ai.lava.demoapp.android.LavaApplication
 import ai.lava.demoapp.android.common.AppSession
 import android.app.Activity
@@ -8,22 +7,26 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Checkbox
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -39,14 +42,22 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.lava.lavasdk.ConsentListener
-import com.lava.lavasdk.LavaPIConsentFlag
 
 class ConsentActivity : ComponentActivity() {
 
+    @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
+        enableEdgeToEdge()
         super.onCreate(savedInstanceState)
         setContent {
-            ConsentForm()
+            Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+                Surface(
+                    modifier = Modifier.fillMaxSize().padding(innerPadding),
+                    color = MaterialTheme.colorScheme.background
+                ) {
+                    ConsentForm()
+                }
+            }
         }
     }
 }
@@ -102,10 +113,11 @@ fun ConsentForm() {
 
         AppSession.instance.setUseCustomConsent(shouldUseCustomConsent)
 
-        LavaApplication.instance.initLavaSdk(
-            BuildConfig.enableSecureMemberToken.toBoolean(),
-            shouldUseCustomConsent
-        )
+        if (shouldUseCustomConsent) {
+            LavaApplication.instance.initLavaSDKWithCustomConsent()
+        } else {
+            LavaApplication.instance.initLavaSDKWithDefaultConsent()
+        }
 
         useCustomConsent = shouldUseCustomConsent
 

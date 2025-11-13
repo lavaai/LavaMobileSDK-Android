@@ -34,5 +34,7 @@
     <string name="string_consent_preferences">Consent Preferences</string>
     <string name="anonymous_status">Currently using as an Anonymous user</string>
     <string name="failed_anonymous_login">Failed to login as Anonymous user</string>
+    <string name="initialize_options">Initialize Options</string>
+    <string name="show_pass">Show Pass</string>
 
 </resources>
