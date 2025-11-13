@@ -26,8 +26,10 @@ import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.lava.lavasdk.Lava
+import com.lava.lavasdk.LavaAuthType
 import com.lava.lavasdk.ResultListener
 import com.lava.lavasdk.Track
+import com.lava.lavasdk.internal.nba_id.NBAIDError
 
 class SignInFragment : Fragment(), View.OnClickListener {
   private var etUserName: EditText? = null
@@ -49,7 +51,14 @@ class SignInFragment : Fragment(), View.OnClickListener {
       if (success) {
         (activity as LoginActivity?)!!.launchMainActivity()
       } else {
-        GenericUtils.displayToast(activity, message)
+        val displayErrorMessage = when (message) {
+          NBAIDError.NBA_ID_00 -> "NBA ID service not configured for this environment"
+          NBAIDError.NBA_ID_01 -> "Failed to acquire an NBA service token"
+          NBAIDError.NBA_ID_02 -> "NBA account not found"
+          NBAIDError.NBA_ID_03 -> "Ticketmaster account not linked"
+          else -> message
+        }
+        GenericUtils.displayToast(activity, displayErrorMessage)
       }
     }
   }
@@ -205,7 +214,7 @@ class SignInFragment : Fragment(), View.OnClickListener {
     ProgressUtils.showProgress(activity, false)
     when (rgExternalSystem?.checkedRadioButtonId) {
       R.id.radioEmail -> Lava.instance.setEmail(username, commonLoginListener)
-      R.id.radioExternalID -> Lava.instance.setUserId(username, "nba_id_encrypted", commonLoginListener)
+      R.id.radioExternalID -> Lava.instance.setUserId(username, LavaAuthType.NBA_ID, commonLoginListener)
     }
   }
 
