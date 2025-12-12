@@ -9,8 +9,6 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -66,19 +64,18 @@ class SplashScreenActivity : Activity() {
     finish()
     startActivity(intent)
 
-    Handler(Looper.getMainLooper()).postDelayed({
-      launchLavaPushNotificationIfNeeded()
-    }, 500)
+
+    launchLavaPushNotificationIfNeeded()
   }
 
   private fun launchLavaPushNotificationIfNeeded() {
     try {
-      val intentExtras = getIntent()?.getExtras()
+      val intentExtras = intent?.extras
 
       if (intentExtras != null) {
         val intentExtrasMap = mutableMapOf<String, String>()
 
-        intentExtras?.keySet()?.forEach { key ->
+        intentExtras.keySet()?.forEach { key ->
           val value = intentExtras.get(key)
           intentExtrasMap[key] = value?.toString() ?: "null"
         }

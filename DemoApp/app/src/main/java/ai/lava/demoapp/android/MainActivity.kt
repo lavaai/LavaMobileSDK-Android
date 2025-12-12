@@ -30,6 +30,7 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.lava.lavasdk.Lava
+import com.lava.lavasdk.LavaConstants
 import com.lava.lavasdk.ResultListener
 
 class MainActivity : BaseActivity(), View.OnClickListener {
@@ -57,6 +58,47 @@ class MainActivity : BaseActivity(), View.OnClickListener {
         changeStatusBarColor()
         initUI()
         setUpUI()
+
+        handleDeepLinkFromIntent(intent)
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        setIntent(intent)
+
+        handleDeepLinkFromIntent(intent)
+    }
+
+    private fun handleDeepLinkFromIntent(intent: Intent?) {
+        intent ?: return
+
+        // Check if this intent contains a deep link from Lava notification
+        val deepLinkUrl = intent.getStringExtra(LavaConstants.DeepLink.URL)
+
+        if (!deepLinkUrl.isNullOrEmpty()) {
+            CLog.i("MainActivity received deep link: $deepLinkUrl")
+
+            // Clear the deep link from intent to prevent re-processing on configuration changes
+            intent.removeExtra(LavaConstants.DeepLink.URL)
+
+            // Handle the deep link using Lava SDK
+            try {
+                if (Lava.instance.canHandleDeepLink(deepLinkUrl)) {
+                    val handled = Lava.instance.handleDeepLink(this, deepLinkUrl)
+                    if (handled) {
+                        CLog.i("Deep link handled by Lava SDK")
+                    } else {
+                        CLog.e("Deep link not handled by Lava SDK")
+                    }
+                } else {
+                    CLog.w("Deep link cannot be handled by Lava SDK: $deepLinkUrl")
+                    // Optionally handle non-Lava deep links here
+                }
+            } catch (e: Exception) {
+                CLog.e("Error handling deep link: ${e.message}")
+                e.printStackTrace()
+            }
+        }
     }
 
     private fun setUpUI() {
@@ -377,10 +419,6 @@ class MainActivity : BaseActivity(), View.OnClickListener {
         } catch (e: Throwable) {
             e.printStackTrace()
         }
-    }
-
-    override fun onNewIntent(intent: Intent) {
-        super.onNewIntent(intent)
     }
 
     private fun openLogoutDialog() {
