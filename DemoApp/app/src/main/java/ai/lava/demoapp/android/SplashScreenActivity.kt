@@ -9,6 +9,8 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -29,6 +31,13 @@ class SplashScreenActivity : Activity() {
 
     WindowInsetsControllerCompat(window, window.decorView.rootView).apply {
       hide(WindowInsetsCompat.Type.statusBars() or WindowInsetsCompat.Type.navigationBars())
+    }
+
+    // Handle deep link for when opening from the notification
+    if (intent?.action == Intent.ACTION_VIEW && !referrer.toString().isEmpty()) {
+      handleDeepLink(intent = intent)
+      finish()
+      return
     }
 
     requestNotificationPermission()
@@ -60,16 +69,19 @@ class SplashScreenActivity : Activity() {
     if (user != null && user.isNormalUser()) {
       classToLaunch = MainActivity::class.java
     }
+
     val intent = Intent(this, classToLaunch)
-    finish()
     startActivity(intent)
+    finish()
 
-
-    launchLavaPushNotificationIfNeeded()
+    Handler(Looper.getMainLooper()).postDelayed({
+      launchLavaPushNotificationIfNeeded()
+    }, 500)
   }
 
   private fun launchLavaPushNotificationIfNeeded() {
     try {
+
       val intentExtras = intent?.extras
 
       if (intentExtras != null) {
@@ -95,15 +107,22 @@ class SplashScreenActivity : Activity() {
         }
       }
 
-      val data = this.intent.data
-      if (data != null && data.isHierarchical) {
-        val uri = this.intent.dataString
-        CLog.i("Deep link clicked $uri")
-        Lava.instance.handleDeepLink(this, uri!!)
-      }
+      // Handle deep link for direct deep link opening
+      handleDeepLink(this.intent)
     } catch (e: Exception) {
       CLog.e("Failed in launchLavaPushNotificationIfNeeded")
       e.printStackTrace()
+    }
+  }
+
+  fun handleDeepLink(intent: Intent?) {
+    intent?.apply {
+      val data = this.data
+      if (data != null && data.isHierarchical) {
+        val uri = intent.dataString
+        CLog.i("Deep link clicked $uri")
+        Lava.instance.handleDeepLink(this@SplashScreenActivity, uri!!)
+      }
     }
   }
 

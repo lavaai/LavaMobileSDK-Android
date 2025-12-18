@@ -30,7 +30,6 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.lava.lavasdk.Lava
-import com.lava.lavasdk.LavaConstants
 import com.lava.lavasdk.ResultListener
 
 class MainActivity : BaseActivity(), View.OnClickListener {
@@ -58,47 +57,6 @@ class MainActivity : BaseActivity(), View.OnClickListener {
         changeStatusBarColor()
         initUI()
         setUpUI()
-
-        handleDeepLinkFromIntent(intent)
-    }
-
-    override fun onNewIntent(intent: Intent) {
-        super.onNewIntent(intent)
-        setIntent(intent)
-
-        handleDeepLinkFromIntent(intent)
-    }
-
-    private fun handleDeepLinkFromIntent(intent: Intent?) {
-        intent ?: return
-
-        // Check if this intent contains a deep link from Lava notification
-        val deepLinkUrl = intent.getStringExtra(LavaConstants.DeepLink.URL)
-
-        if (!deepLinkUrl.isNullOrEmpty()) {
-            CLog.i("MainActivity received deep link: $deepLinkUrl")
-
-            // Clear the deep link from intent to prevent re-processing on configuration changes
-            intent.removeExtra(LavaConstants.DeepLink.URL)
-
-            // Handle the deep link using Lava SDK
-            try {
-                if (Lava.instance.canHandleDeepLink(deepLinkUrl)) {
-                    val handled = Lava.instance.handleDeepLink(this, deepLinkUrl)
-                    if (handled) {
-                        CLog.i("Deep link handled by Lava SDK")
-                    } else {
-                        CLog.e("Deep link not handled by Lava SDK")
-                    }
-                } else {
-                    CLog.w("Deep link cannot be handled by Lava SDK: $deepLinkUrl")
-                    // Optionally handle non-Lava deep links here
-                }
-            } catch (e: Exception) {
-                CLog.e("Error handling deep link: ${e.message}")
-                e.printStackTrace()
-            }
-        }
     }
 
     private fun setUpUI() {
@@ -162,13 +120,13 @@ class MainActivity : BaseActivity(), View.OnClickListener {
         try {
             val fragmentTransaction = supportFragmentManager.beginTransaction()
             if (isAdd) fragmentTransaction.add(
-                    R.id.fragment_container,
-                    fragment,
-                    fragment.javaClass.simpleName
+                R.id.fragment_container,
+                fragment,
+                fragment.javaClass.simpleName
             ) else fragmentTransaction.replace(
-                    R.id.fragment_container,
-                    fragment,
-                    fragment.javaClass.simpleName
+                R.id.fragment_container,
+                fragment,
+                fragment.javaClass.simpleName
             )
             if (isBackStack) fragmentTransaction.addToBackStack(fragment.javaClass.simpleName)
             try {
@@ -183,11 +141,11 @@ class MainActivity : BaseActivity(), View.OnClickListener {
 
     private fun setupDrawer() {
         mDrawerToggle = object : ActionBarDrawerToggle(
-                this,
-                mDrawerLayout,
-                toolbar,
-                R.string.drawer_open,
-                R.string.drawer_close
+            this,
+            mDrawerLayout,
+            toolbar,
+            R.string.drawer_open,
+            R.string.drawer_close
         ) {
             override fun onDrawerOpened(drawerView: View) {
                 super.onDrawerOpened(drawerView)
@@ -249,39 +207,47 @@ class MainActivity : BaseActivity(), View.OnClickListener {
                 removeAllFragments()
                 addFragments(AccountSettingsFragment(), false, false)
             }
+
             R.id.tv_log_out -> {
                 closeDrawer()
                 openLogoutDialog()
                 selectedTab = -1
             }
+
             R.id.tv_profile -> {
                 closeDrawer()
                 removeAllFragments()
                 addFragments(ProfileFragment(), false, false)
             }
+
             R.id.toolbar_save -> if (notifierListener != null) {
                 notifierListener!!.onSaveClicked()
             }
+
             R.id.tv_debug -> {
                 closeDrawer()
                 removeAllFragments()
                 addFragments(DebugFragment(), false, false)
             }
+
             R.id.tv_show_debug -> {
                 closeDrawer()
                 DebugActivity.showDebugInfo(this)
                 selectedTab = -1
             }
+
             R.id.tv_demo -> {
                 closeDrawer()
                 removeAllFragments()
                 addFragments(AnalyticsDemoFragment(), false, false)
             }
+
             R.id.tv_inbox_message -> {
                 closeDrawer()
                 removeAllFragments()
                 addFragments(NotificationInboxFragment(), false, false)
             }
+
             else -> {
             }
         }
@@ -313,7 +279,7 @@ class MainActivity : BaseActivity(), View.OnClickListener {
 
     fun addEditProfileFragment() {
         val fragment = supportFragmentManager.findFragmentByTag(
-                EditProfileFragment::class.java.simpleName
+            EditProfileFragment::class.java.simpleName
         ) ?: EditProfileFragment()
 
         if (!fragment.isAdded) {
@@ -325,9 +291,10 @@ class MainActivity : BaseActivity(), View.OnClickListener {
         try {
             onBackPressed()
             val fragment = supportFragmentManager.findFragmentByTag(
-                    EditProfileFragment::class.java.canonicalName
+                EditProfileFragment::class.java.canonicalName
             )
-            if (fragment != null) supportFragmentManager.beginTransaction().remove(fragment).commit()
+            if (fragment != null) supportFragmentManager.beginTransaction().remove(fragment)
+                .commit()
             tvProfile?.let { onClick(it) }
             mDrawerToggle?.syncState()
         } catch (e: Exception) {
@@ -375,7 +342,11 @@ class MainActivity : BaseActivity(), View.OnClickListener {
         GenericUtils.hideKeyboard(this)
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray
+    ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
 
@@ -397,7 +368,7 @@ class MainActivity : BaseActivity(), View.OnClickListener {
 
     fun makeToolbarSaveButtonInvisible() {
         toolbar!!.findViewById<View>(R.id.toolbar_save).visibility =
-                View.INVISIBLE
+            View.INVISIBLE
     }
 
     fun makeToolbarSaveButtonVisible() {
@@ -406,7 +377,10 @@ class MainActivity : BaseActivity(), View.OnClickListener {
 
     private fun removeAllFragments() {
         try {
-            supportFragmentManager.popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+            supportFragmentManager.popBackStackImmediate(
+                null,
+                FragmentManager.POP_BACK_STACK_INCLUSIVE
+            )
             for (fragment in supportFragmentManager.fragments) {
                 if (fragment != null) {
                     try {
