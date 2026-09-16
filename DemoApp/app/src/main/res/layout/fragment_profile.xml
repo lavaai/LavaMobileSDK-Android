@@ -110,6 +110,36 @@
         </LinearLayout>
 
         <TextView
+            android:id="@+id/tvEmbedPass"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:background="@drawable/selector_general_button"
+            android:padding="16dp"
+            android:text="Show Embed Pass"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:layout_marginTop="15dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            />
+
+        <TextView
+            android:id="@+id/tvInsetPass"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:background="@drawable/selector_general_button"
+            android:padding="16dp"
+            android:text="Show Inset Pass"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:layout_marginTop="15dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            />
+
+        <TextView
             android:id="@+id/tvInAppPass"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
