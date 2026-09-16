@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="club_navy">#0B1F3A</color>
+    <color name="club_gold">#E8B923</color>
+    <color name="club_ice">#F4F6F8</color>
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>

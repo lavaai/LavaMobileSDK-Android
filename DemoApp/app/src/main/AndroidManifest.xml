@@ -54,6 +54,20 @@
             android:windowSoftInputMode="stateHidden|adjustPan" />
 
         <activity
+            android:name=".inset.InsetPassDemoActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="Inset Pass"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
+
+        <activity
+            android:name=".embed.EmbedPassDemoActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="Embed Pass"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
+
+        <activity
             android:name=".initOptions.InitOptionsActivity"
             android:configChanges="orientation|screenSize"
             android:label="InitOptionsActivity"

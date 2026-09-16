@@ -3,6 +3,8 @@ package ai.lava.demoapp.android.profile
 import ai.lava.demoapp.android.MainActivity
 import ai.lava.demoapp.android.R
 import ai.lava.demoapp.android.consent.ConsentActivity
+import ai.lava.demoapp.android.embed.EmbedPassDemoActivity
+import ai.lava.demoapp.android.inset.InsetPassDemoActivity
 import ai.lava.demoapp.android.utils.CLog
 import android.app.Activity
 import android.content.Intent
@@ -66,6 +68,8 @@ class ProfileFragment : Fragment(), View.OnClickListener {
     tvPhoneNumber = view.findViewById(R.id.tv_phone_number)
     tvEmailId = view.findViewById(R.id.tv_email_id)
     view.findViewById<View>(R.id.tvInAppPass).setOnClickListener(this)
+    view.findViewById<View>(R.id.tvInsetPass).setOnClickListener(this)
+    view.findViewById<View>(R.id.tvEmbedPass).setOnClickListener(this)
     view.findViewById<View>(R.id.tvSDKInbox).setOnClickListener(this)
     view.findViewById<View>(R.id.tvSDKCustomInbox).setOnClickListener(this)
     view.findViewById<View>(R.id.tvConsentDialog).setOnClickListener(this)
@@ -115,6 +119,14 @@ class ProfileFragment : Fragment(), View.OnClickListener {
 
       R.id.tvInAppPass -> {
         activity?.let{ Lava.instance.showInAppPass(it, "test-app-token") }
+      }
+
+      R.id.tvInsetPass -> {
+        startActivity(Intent(context, InsetPassDemoActivity::class.java))
+      }
+
+      R.id.tvEmbedPass -> {
+        startActivity(Intent(context, EmbedPassDemoActivity::class.java))
       }
 
       R.id.tvSDKInbox -> {
