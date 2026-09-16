@@ -92,7 +92,7 @@ dependencyResolutionManagement {
 3. In your app level `build.gradle`, add the following dependency and sync the project:
 
 ```groovy
-implementation 'ai.lava.mobile-sdk:lavasdk:2.0.32'
+implementation 'ai.lava.mobile-sdk:lavasdk:2.0.33-dev1'
 ```
 
 ## Help
