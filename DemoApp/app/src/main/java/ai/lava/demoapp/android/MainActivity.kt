@@ -263,6 +263,7 @@ class MainActivity : BaseActivity(), View.OnClickListener {
     }
 
     private fun localLogout() {
+        Lava.instance.hideInAppPass(true)
         Lava.instance.setEmail(null, object : ResultListener {
             override fun onResult(success: Boolean, message: String) {
                 ProgressUtils.cancel()
