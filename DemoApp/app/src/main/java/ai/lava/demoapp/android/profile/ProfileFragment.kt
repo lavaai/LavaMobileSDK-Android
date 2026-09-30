@@ -3,6 +3,7 @@ package ai.lava.demoapp.android.profile
 import ai.lava.demoapp.android.MainActivity
 import ai.lava.demoapp.android.R
 import ai.lava.demoapp.android.consent.ConsentActivity
+import ai.lava.demoapp.android.deepLink.DeepLinkPassDemoActivity
 import ai.lava.demoapp.android.embed.EmbedPassDemoActivity
 import ai.lava.demoapp.android.inset.InsetPassDemoActivity
 import ai.lava.demoapp.android.utils.CLog
@@ -70,6 +71,7 @@ class ProfileFragment : Fragment(), View.OnClickListener {
     view.findViewById<View>(R.id.tvInAppPass).setOnClickListener(this)
     view.findViewById<View>(R.id.tvInsetPass).setOnClickListener(this)
     view.findViewById<View>(R.id.tvEmbedPass).setOnClickListener(this)
+    view.findViewById<View>(R.id.tvDeepLinkPass).setOnClickListener(this)
     view.findViewById<View>(R.id.tvSDKInbox).setOnClickListener(this)
     view.findViewById<View>(R.id.tvSDKCustomInbox).setOnClickListener(this)
     view.findViewById<View>(R.id.tvConsentDialog).setOnClickListener(this)
@@ -127,6 +129,10 @@ class ProfileFragment : Fragment(), View.OnClickListener {
 
       R.id.tvEmbedPass -> {
         startActivity(Intent(context, EmbedPassDemoActivity::class.java))
+      }
+
+      R.id.tvDeepLinkPass -> {
+        startActivity(Intent(context, DeepLinkPassDemoActivity::class.java))
       }
 
       R.id.tvSDKInbox -> {
