@@ -116,7 +116,7 @@
             android:layout_centerInParent="true"
             android:background="@drawable/selector_general_button"
             android:padding="16dp"
-            android:text="Show Deep Link Pass"
+            android:text="Show Deep Link Embed Pass"
             android:textAlignment="center"
             android:textColor="@color/white"
             android:layout_marginTop="15dp"

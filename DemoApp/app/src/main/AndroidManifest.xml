@@ -72,7 +72,7 @@
             android:configChanges="orientation|screenSize"
             android:label="Deep Link Pass"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="stateVisible|adjustResize" />
+            android:windowSoftInputMode="stateHidden|adjustPan" />
 
         <activity
             android:name=".initOptions.InitOptionsActivity"
