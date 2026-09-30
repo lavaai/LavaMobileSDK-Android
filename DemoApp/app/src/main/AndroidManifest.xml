@@ -68,6 +68,13 @@
             android:windowSoftInputMode="stateHidden|adjustPan" />
 
         <activity
+            android:name=".deepLink.DeepLinkPassDemoActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="Deep Link Pass"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
+
+        <activity
             android:name=".initOptions.InitOptionsActivity"
             android:configChanges="orientation|screenSize"
             android:label="InitOptionsActivity"
