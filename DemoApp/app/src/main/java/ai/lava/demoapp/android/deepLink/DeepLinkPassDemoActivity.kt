@@ -1,6 +1,7 @@
 package ai.lava.demoapp.android.deepLink
 
 import ai.lava.demoapp.android.R
+import android.content.Context
 import android.os.Bundle
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
@@ -72,7 +73,7 @@ class DeepLinkPassDemoActivity : AppCompatActivity() {
   }
 
   private fun hideKeyboard(input: EditText) {
-    val imm = getSystemService(INPUT_METHOD_SERVICE) as? InputMethodManager
+    val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
     imm?.hideSoftInputFromWindow(input.windowToken, 0)
   }
 
