@@ -37,18 +37,20 @@ Please refer to the Configuration section of SDK-Android for details on needed c
 
 https://github.com/lavaai/SDK-Android#3-configuration
 
-The demo app needs google-services.json and lava-services.json file to be present in the app folder for the build to succeed.
+The demo app needs `google-services.json` and `lava-services.json` in the `app` folder for the build to succeed. The real files are gitignored.
 
-google-services.json is obtained from Firebase Console.
+Copy the example files and fill in your credentials:
 
-lava-services.json must contain the clientId and appKey needed for the Lava SDK init method, for example:
+```bash
+cp DemoApp/app/google-services.json.example DemoApp/app/google-services.json
+cp DemoApp/app/lava-services.json.example DemoApp/app/lava-services.json
+```
 
-`{
-"clientId": "***-backend",
-"appKey": "****05b2****"
-}`
+`google-services.json` is obtained from the Firebase Console. Replace the example with that file, or fill in the placeholders.
 
-The lava-services.json file setting values are being automatically added to the BuildConfig class by build.gradle.
+Locally or in CI/GitHub workflows, replace `clientId` and `appKey` in `lava-services.json` with appropriate values.
+
+The `lava-services.json` setting values are added to the `BuildConfig` class by `build.gradle`.
 
 ## 4. Development / debug / test cycle configuration
 
