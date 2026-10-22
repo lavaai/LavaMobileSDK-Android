@@ -103,6 +103,28 @@ PassPage.BENEFITS    // "benefits"
 PassPage("rewards")  // any portal page ID
 ```
 
+Pass the page to `showInAppPass` when you present the pass. `this` is the host activity.
+
+**Usage**
+
+```kotlin
+// Open the rewards page full screen
+Lava.instance.showInAppPass(
+    this,
+    PassPresentation.fullScreen,
+    PassPage("rewards")
+)
+
+// Open the challenges page full screen
+Lava.instance.showInAppPass(
+    this,
+    PassPresentation.fullScreen,
+    PassPage("challenges")
+)
+```
+
+The same `PassPage` value works with an inset presentation and with `createInAppPassFragment`. See [Show the pass inset above your chrome](#show-the-pass-inset-above-your-chrome) and [Embed the pass in your own layout](#embed-the-pass-in-your-own-layout).
+
 Deep links such as `…/lava/inapp/pass?page=history` and `…/lava/inapp/pass/benefits` are parsed the same way.
 
 ## Show the pass inset above your chrome
