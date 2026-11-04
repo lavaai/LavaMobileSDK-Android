@@ -4,12 +4,14 @@ import ai.lava.demoapp.android.R
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.lava.lavasdk.Lava
 import com.lava.lavasdk.PassPage
+import com.lava.lavasdk.ResultListener
 
 /**
  * Host-owned embed: the pass fragment lives in [R.id.passContainer].
@@ -84,7 +86,16 @@ class EmbedPassDemoActivity : AppCompatActivity() {
 
     val existing = attachedPassFragment()
     if (existing == null) {
-      val fragment = Lava.instance.createInAppPassFragment(PassPage.PASS)
+      var consentBlocked = false
+      val fragment = Lava.instance.createInAppPassFragment(PassPage.PASS, object : ResultListener {
+        override fun onResult(success: Boolean, message: String) {
+          consentBlocked = true
+          Toast.makeText(this@EmbedPassDemoActivity, message, Toast.LENGTH_LONG).show()
+        }
+      })
+      if (consentBlocked) {
+        return
+      }
       passFragment = fragment
       supportFragmentManager.beginTransaction()
         .replace(R.id.passContainer, fragment, PASS_TAG)

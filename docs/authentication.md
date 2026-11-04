@@ -42,7 +42,7 @@ Lava.instance.setEmail(email, object : ResultListener {
 
 ### Error handling
 
-If `setEmail` fails, `onResult` is called with `success` set to `false` and `message` set to the error.
+If `setEmail` fails, `onResult` is called with `success` set to `false` and `message` set to the error. A missing personal-information consent uses the sentence `This operation requires … consent to be enabled.` Use [`setUserId`](#set-user-id) with `AuthResultListener` when the app needs to tell that consent failure from an NBA ID failure.
 
 ## Set user ID
 
@@ -54,61 +54,75 @@ If the app does not use email as the user identity, authenticate with `setUserId
 
 ```kotlin
 fun setUserId(id: String?, type: String?, listener: ResultListener?)
+
+fun setUserId(id: String?, type: String?, listener: AuthResultListener)
 ```
 
 | Parameter | Required | Data type | Description |
 | --- | --- | --- | --- |
 | `id` | No | `String` | External identifier. Can be an email or a UUID. Passing `null` logs the user out. |
 | `type` | No | `String` | External system used to authenticate the user. Can be `email` or `nba_id_encrypted`. `null` defaults to `email`. |
-| `listener` | Yes | `ResultListener` | Listener for success and failure. |
+| `listener` | No | `ResultListener` or `AuthResultListener` | Listener for success and failure. `ResultListener` is optional. `AuthResultListener` reports classified errors. |
 
 **Usage**
 
 ```kotlin
-Lava.instance.setUserId(id, type, object : ResultListener {
-    override fun onResult(success: Boolean, message: String) {
+Lava.instance.setUserId(id, type, object : AuthResultListener {
+    override fun onSuccess() {
         // Perform redirect
+    }
+
+    override fun onError(error: Exception) {
+        // ConsentError or NBAIDError
     }
 })
 ```
 
+`setUserId(id, type, null)` still selects the `ResultListener` overload.
+
 ### Error handling
 
-As with `setEmail`, failure calls `onResult` with `success` set to `false` and the error in `message`. This method also supports NBA ID authentication. In those cases `message` is an NBA ID error code.
+`AuthResultListener.onError` receives the same kinds of failure as iOS `onError`.
 
-| Message | Meaning |
+A missing personal-information consent is `ConsentError.ConsentRequired`. `requiredFlags` is the set the call needs: `StrictlyNecessary`, plus `Functional` when `id` is set. The SDK does not call the backend in that case. `message` is `This operation requires … consent to be enabled.` `ConsentError` also has `InvalidConsentMapping`. `setUserId` does not produce that case.
+
+An NBA ID failure is an `NBAIDError`. `message` is the code.
+
+| `NBAIDError` | Meaning |
 | --- | --- |
 | `NBA_ID_00` | NBA ID service not configured for this environment |
 | `NBA_ID_01` | Failed to acquire an NBA service token |
 | `NBA_ID_02` | NBA account not found |
 | `NBA_ID_03` | Ticketmaster account not linked |
 
+Any other failure is a plain `Exception`. Use `message`.
+
 ```kotlin
 Lava.instance.setUserId(
     userId,
     "nba_id_encrypted",
-    object : ResultListener {
-        override fun onResult(success: Boolean, message: String) {
-            if (success) {
-                // Successful
-            } else {
-                val displayErrorMessage = when (message) {
-                    NBAIDError.NBA_ID_00 -> "NBA ID service not configured for this environment"
-                    NBAIDError.NBA_ID_01 -> "Failed to acquire an NBA service token"
-                    NBAIDError.NBA_ID_02 -> "NBA account not found"
-                    NBAIDError.NBA_ID_03 -> "Ticketmaster account not linked"
-                    else -> {
-                        // Handle non NBA ID errors
-                    }
-                }
-                // Perform corresponding action
+    object : AuthResultListener {
+        override fun onSuccess() {
+            // Successful
+        }
+
+        override fun onError(error: Exception) {
+            val displayErrorMessage = when (error) {
+                is ConsentError.ConsentRequired ->
+                    "This operation requires ${error.requiredFlags.joinToString()} consent to be enabled."
+                NBAIDError.NBA_ID_00 -> "NBA ID service not configured for this environment"
+                NBAIDError.NBA_ID_01 -> "Failed to acquire an NBA service token"
+                NBAIDError.NBA_ID_02 -> "NBA account not found"
+                NBAIDError.NBA_ID_03 -> "Ticketmaster account not linked"
+                else -> error.message
             }
+            // Perform corresponding action
         }
     }
 )
 ```
 
-`NBAIDError` holds those constants so the app can compare them directly.
+The `ResultListener` overload is unchanged. Its `message` is that same consent sentence, an NBA code, or another error string.
 
 ## LAVA user
 
