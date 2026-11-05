@@ -2,7 +2,7 @@
 
 [Integration guide](README.md)
 
-## Unreleased
+## v2.0.35
 
 ### Enhancements
 
