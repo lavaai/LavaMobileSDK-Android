@@ -25,11 +25,13 @@ import android.widget.RadioGroup
 import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import com.lava.lavasdk.AuthResultListener
+import com.lava.lavasdk.ConsentError
 import com.lava.lavasdk.Lava
 import com.lava.lavasdk.LavaAuthType
+import com.lava.lavasdk.NBAIDError
 import com.lava.lavasdk.ResultListener
 import com.lava.lavasdk.Track
-import com.lava.lavasdk.internal.nba_id.NBAIDError
 
 class SignInFragment : Fragment(), View.OnClickListener {
   private var etUserName: EditText? = null
@@ -43,23 +45,26 @@ class SignInFragment : Fragment(), View.OnClickListener {
   private var rgExternalSystem: RadioGroup? = null
   private var remaining = 0
 
-  var commonLoginListener: ResultListener = object : ResultListener {
-    override fun onResult(success: Boolean, message: String) {
+  var authLoginListener: AuthResultListener = object : AuthResultListener {
+    override fun onSuccess() {
       ProgressUtils.cancel()
-      CLog.d("onLogin() called with: success = [$success], message = [$message]")
+      CLog.d("onLogin() called with: success = [true]")
+      (activity as LoginActivity?)!!.launchMainActivity()
+    }
 
-      if (success) {
-        (activity as LoginActivity?)!!.launchMainActivity()
-      } else {
-        val displayErrorMessage = when (message) {
-          NBAIDError.NBA_ID_00 -> "NBA ID service not configured for this environment"
-          NBAIDError.NBA_ID_01 -> "Failed to acquire an NBA service token"
-          NBAIDError.NBA_ID_02 -> "NBA account not found"
-          NBAIDError.NBA_ID_03 -> "Ticketmaster account not linked"
-          else -> message
-        }
-        GenericUtils.displayToast(activity, displayErrorMessage)
+    override fun onError(error: Exception) {
+      ProgressUtils.cancel()
+      CLog.d("onLogin() called with: success = [false], message = [${error.message}]")
+      val displayErrorMessage = when (error) {
+        is ConsentError.ConsentRequired ->
+          error.message ?: "Consent required: ${error.requiredFlags.joinToString()}"
+        NBAIDError.NBA_ID_00 -> "NBA ID service not configured for this environment"
+        NBAIDError.NBA_ID_01 -> "Failed to acquire an NBA service token"
+        NBAIDError.NBA_ID_02 -> "NBA account not found"
+        NBAIDError.NBA_ID_03 -> "Ticketmaster account not linked"
+        else -> error.message ?: ""
       }
+      GenericUtils.displayToast(activity, displayErrorMessage)
     }
   }
   private var btInboxMessage: Button? = null
@@ -200,7 +205,7 @@ class SignInFragment : Fragment(), View.OnClickListener {
 
         AppSession.instance.setEmail(body.email)
 
-        Lava.instance.setEmail(username, commonLoginListener)
+        Lava.instance.setUserId(username, LavaAuthType.EMAIL, authLoginListener)
 
         authResponse?.memberToken?.let {
           Lava.instance.setSecureMemberToken(it)
@@ -213,8 +218,8 @@ class SignInFragment : Fragment(), View.OnClickListener {
     val username = etUserName?.text?.toString()
     ProgressUtils.showProgress(activity, false)
     when (rgExternalSystem?.checkedRadioButtonId) {
-      R.id.radioEmail -> Lava.instance.setEmail(username, commonLoginListener)
-      R.id.radioExternalID -> Lava.instance.setUserId(username, LavaAuthType.NBA_ID, commonLoginListener)
+      R.id.radioEmail -> Lava.instance.setUserId(username, LavaAuthType.EMAIL, authLoginListener)
+      R.id.radioExternalID -> Lava.instance.setUserId(username, LavaAuthType.NBA_ID, authLoginListener)
     }
   }
 

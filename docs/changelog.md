@@ -2,6 +2,14 @@
 
 [Integration guide](README.md)
 
+## Unreleased
+
+### Enhancements
+
+- Add `setUserId(id, type, AuthResultListener)`. `onError` receives `ConsentError.ConsentRequired` or `NBAIDError`, matching iOS. The existing `ResultListener` overload is unchanged.
+- Include `showCloseButton=true|false` on the in-app pass URL so the HTML can read close-button chrome before `setPassChrome` runs. Host APIs are unchanged.
+- Report a missing personal-information consent from `createInAppPassFragment` and `handleDeepLinkAsFragment` through `ResultListener`, matching `showInAppPass`.
+
 ## v2.0.34
 
 ### Features

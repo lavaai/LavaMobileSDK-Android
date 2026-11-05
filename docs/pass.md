@@ -79,6 +79,8 @@ data class PassInsets(
 
 `showsCloseButton` is forwarded to the pass HTML. `null` means automatic: show the close button only for full-screen presentation.
 
+The same boolean is available to the pass page as soon as it loads: the SDK requests the pass URL with `?showCloseButton=true` or `?showCloseButton=false`. After load, the SDK also calls `setPassChrome({ showCloseButton })` with that same value so existing templates keep working.
+
 **Usage**
 
 ```kotlin
@@ -175,13 +177,36 @@ Use embed when the pass should be a real tab, or sit in a frame the SDK should n
 
 ```kotlin
 fun createInAppPassFragment(page: PassPage = PassPage.PASS): Fragment
+fun createInAppPassFragment(page: PassPage, listener: ResultListener?): Fragment
 ```
 
 - `page`: named portal page to open. Defaults to `pass`.
+- `listener`: notified when there is a consent error. The callback runs before the method returns, and only when consent is missing.
 
 Returns a pass `Fragment` for your container. The portal close button is hidden.
 
+When Strictly Necessary or Functional consent is missing and you pass `listener`, the callback runs and the returned fragment is empty. Do not add it. When you omit `listener`, add the fragment: the SDK shows `Cannot open pass: …` once that fragment is attached.
+
 **Usage**
+
+Show the embedded pass with a consent listener when you need to ask for Functional consent:
+
+```kotlin
+var consentBlocked = false
+val fragment = Lava.instance.createInAppPassFragment(PassPage.PASS, object : ResultListener {
+    override fun onResult(success: Boolean, message: String) {
+        consentBlocked = true
+        showConsentDialog(message)
+    }
+})
+if (!consentBlocked) {
+    supportFragmentManager.beginTransaction()
+        .replace(R.id.pass_container, fragment)
+        .commit()
+}
+```
+
+If the app does not need to handle consent:
 
 ```kotlin
 val fragment = Lava.instance.createInAppPassFragment(PassPage.PASS)
@@ -314,11 +339,13 @@ When the host app owns navigation (a push, a tab replace, or a custom container)
 
 ```kotlin
 fun handleDeepLinkAsFragment(deepLinkData: String): Fragment?
+fun handleDeepLinkAsFragment(deepLinkData: String, listener: ResultListener?): Fragment?
 ```
 
 - `deepLinkData`: the same input as `handleDeepLink`: a full URL, or any string containing `lava/inapp/pass`.
+- `listener`: notified when there is a consent error. The callback runs before the method returns, and only when consent is missing.
 
-Returns a pass `Fragment` configured with the parsed page and the raw string for `linkPass`, or `null` when this is not a pass UI link.
+Returns a pass `Fragment` configured with the parsed page and the raw string for `linkPass`, or `null` when this is not a pass UI link. A pass link also returns `null` when Strictly Necessary or Functional consent is missing. In that case `listener` is called and the pass is not loaded.
 
 - Trigger links (`lava/trigger/…`) return `null`. Keep using `handleDeepLink` for those.
 - Unrelated URLs return `null`.
@@ -337,8 +364,16 @@ The `?page=` query wins over a path segment (`lava/inapp/pass/history`). If no p
 
 ```kotlin
 if (Lava.instance.canHandleDeepLink(url)) {
-    val fragment = Lava.instance.handleDeepLinkAsFragment(url)
-    if (fragment != null) {
+    var consentBlocked = false
+    val fragment = Lava.instance.handleDeepLinkAsFragment(url, object : ResultListener {
+        override fun onResult(success: Boolean, message: String) {
+            consentBlocked = true
+            showConsentDialog(message)
+        }
+    })
+    if (consentBlocked) {
+        // showConsentDialog already ran
+    } else if (fragment != null) {
         supportFragmentManager.beginTransaction()
             .replace(R.id.pass_container, fragment)
             .commit()
