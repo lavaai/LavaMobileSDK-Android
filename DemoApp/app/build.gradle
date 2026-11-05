@@ -137,12 +137,14 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
 
+    // RestClient uses HttpLoggingInterceptor. The published SDK no longer exposes this transitively.
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.9.0'
+
     if (debugLavaSdkBuild.toBoolean()) {
         implementation 'com.squareup.retrofit2:retrofit:2.9.0'
         implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
         implementation 'com.squareup.retrofit2:converter-scalars:2.9.0'
         implementation 'com.squareup.okhttp3:okhttp:4.9.0'
-        implementation 'com.squareup.okhttp3:logging-interceptor:4.9.0'
         implementation 'com.squareup.okio:okio:2.8.0'
         // Use the local SDK project so inset APIs are available while developing
         implementation project(path: ':lavasdk')
